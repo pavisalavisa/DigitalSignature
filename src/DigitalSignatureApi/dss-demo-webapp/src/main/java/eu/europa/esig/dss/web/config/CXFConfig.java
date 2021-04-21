@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 import javax.xml.ws.Endpoint;
-import javax.xml.ws.soap.SOAPBinding;
 
 import org.apache.cxf.Bus;
 import org.apache.cxf.endpoint.Server;
@@ -31,44 +30,25 @@ import eu.europa.esig.dss.web.exception.ExceptionRestMapper;
 import eu.europa.esig.dss.ws.cert.validation.common.RemoteCertificateValidationService;
 import eu.europa.esig.dss.ws.cert.validation.rest.RestCertificateValidationServiceImpl;
 import eu.europa.esig.dss.ws.cert.validation.rest.client.RestCertificateValidationService;
-import eu.europa.esig.dss.ws.cert.validation.soap.SoapCertificateValidationServiceImpl;
 import eu.europa.esig.dss.ws.server.signing.common.RemoteSignatureTokenConnection;
 import eu.europa.esig.dss.ws.server.signing.rest.RestSignatureTokenConnectionImpl;
 import eu.europa.esig.dss.ws.server.signing.rest.client.RestSignatureTokenConnection;
-import eu.europa.esig.dss.ws.server.signing.soap.SoapSignatureTokenConnectionImpl;
-import eu.europa.esig.dss.ws.server.signing.soap.client.SoapSignatureTokenConnection;
 import eu.europa.esig.dss.ws.signature.common.RemoteDocumentSignatureService;
 import eu.europa.esig.dss.ws.signature.common.RemoteMultipleDocumentsSignatureService;
 import eu.europa.esig.dss.ws.signature.rest.RestDocumentSignatureServiceImpl;
 import eu.europa.esig.dss.ws.signature.rest.RestMultipleDocumentSignatureServiceImpl;
 import eu.europa.esig.dss.ws.signature.rest.client.RestDocumentSignatureService;
 import eu.europa.esig.dss.ws.signature.rest.client.RestMultipleDocumentSignatureService;
-import eu.europa.esig.dss.ws.signature.soap.SoapDocumentSignatureServiceImpl;
-import eu.europa.esig.dss.ws.signature.soap.SoapMultipleDocumentsSignatureServiceImpl;
-import eu.europa.esig.dss.ws.signature.soap.client.DateAdapter;
-import eu.europa.esig.dss.ws.signature.soap.client.SoapDocumentSignatureService;
-import eu.europa.esig.dss.ws.signature.soap.client.SoapMultipleDocumentsSignatureService;
 import eu.europa.esig.dss.ws.timestamp.remote.RemoteTimestampService;
 import eu.europa.esig.dss.ws.timestamp.remote.rest.RestTimestampServiceImpl;
 import eu.europa.esig.dss.ws.timestamp.remote.rest.client.RestTimestampService;
-import eu.europa.esig.dss.ws.timestamp.remote.soap.SoapTimestampServiceImpl;
-import eu.europa.esig.dss.ws.timestamp.remote.soap.client.SoapTimestampService;
 import eu.europa.esig.dss.ws.validation.common.RemoteDocumentValidationService;
 import eu.europa.esig.dss.ws.validation.rest.RestDocumentValidationServiceImpl;
 import eu.europa.esig.dss.ws.validation.rest.client.RestDocumentValidationService;
-import eu.europa.esig.dss.ws.validation.soap.SoapDocumentValidationServiceImpl;
-import eu.europa.esig.dss.ws.validation.soap.client.SoapDocumentValidationService;
 
 @Configuration
 @ImportResource({ "classpath:META-INF/cxf/cxf.xml" })
 public class CXFConfig {
-
-	public static final String SOAP_SIGNATURE_ONE_DOCUMENT = "/soap/signature/one-document";
-	public static final String SOAP_SIGNATURE_MULTIPLE_DOCUMENTS = "/soap/signature/multiple-documents";
-	public static final String SOAP_VALIDATION = "/soap/validation";
-	public static final String SOAP_CERTIFICATE_VALIDATION = "/soap/certificate-validation";
-	public static final String SOAP_SERVER_SIGNING = "/soap/server-signing";
-	public static final String SOAP_TIMESTAMP_SERVICE = "/soap/timestamp-service";
 
 	public static final String REST_SIGNATURE_ONE_DOCUMENT = "/rest/signature/one-document";
 	public static final String REST_SIGNATURE_MULTIPLE_DOCUMENTS = "/rest/signature/multiple-documents";
@@ -115,111 +95,6 @@ public class CXFConfig {
 			bus.getOutInterceptors().add(loggingOutInterceptor);
 			bus.getOutFaultInterceptors().add(loggingOutInterceptor);
 		}
-	}
-
-	// --------------- SOAP
-
-	@Bean
-	public SoapDocumentSignatureService soapDocumentSignatureService() {
-		SoapDocumentSignatureServiceImpl service = new SoapDocumentSignatureServiceImpl();
-		service.setService(remoteSignatureService);
-		return service;
-	}
-
-	@Bean
-	public SoapMultipleDocumentsSignatureService soapMultipleDocumentsSignatureService() {
-		SoapMultipleDocumentsSignatureServiceImpl service = new SoapMultipleDocumentsSignatureServiceImpl();
-		service.setService(remoteMultipleDocumentsSignatureService);
-		return service;
-	}
-
-	@Bean
-	public SoapDocumentValidationService soapValidationService() {
-		SoapDocumentValidationServiceImpl service = new SoapDocumentValidationServiceImpl();
-		service.setValidationService(remoteValidationService);
-		return service;
-	}
-
-	@Bean
-	public SoapCertificateValidationServiceImpl soapCertificateValidationService() {
-		SoapCertificateValidationServiceImpl service = new SoapCertificateValidationServiceImpl();
-		service.setValidationService(remoteCertificateValidationService);
-		return service;
-	}
-
-	@Bean
-	public SoapSignatureTokenConnection soapServerSigningService() {
-		SoapSignatureTokenConnectionImpl signatureToken = new SoapSignatureTokenConnectionImpl();
-		signatureToken.setToken(serverToken);
-		return signatureToken;
-	}
-	
-	@Bean
-	public SoapTimestampService soapTimestampService() {
-		SoapTimestampServiceImpl soapTimestampService = new SoapTimestampServiceImpl();
-		soapTimestampService.setTimestampService(timestampService);
-		return soapTimestampService;
-	}
-
-	@Bean
-	public Endpoint createSoapSignatureEndpoint() {
-		EndpointImpl endpoint = new EndpointImpl(bus, soapDocumentSignatureService());
-		endpoint.publish(SOAP_SIGNATURE_ONE_DOCUMENT);
-		addXmlAdapterDate(endpoint);
-		enableMTOM(endpoint);
-		return endpoint;
-	}
-
-	@Bean
-	public Endpoint createSoapMultipleDocumentsSignatureEndpoint() {
-		EndpointImpl endpoint = new EndpointImpl(bus, soapMultipleDocumentsSignatureService());
-		endpoint.publish(SOAP_SIGNATURE_MULTIPLE_DOCUMENTS);
-		addXmlAdapterDate(endpoint);
-		enableMTOM(endpoint);
-		return endpoint;
-	}
-
-	@Bean
-	public Endpoint createSoapValidationEndpoint() {
-		EndpointImpl endpoint = new EndpointImpl(bus, soapValidationService());
-		endpoint.publish(SOAP_VALIDATION);
-		enableMTOM(endpoint);
-		return endpoint;
-	}
-	
-	@Bean
-	public Endpoint createSoapCertificateValidationEndpoint() {
-		EndpointImpl endpoint = new EndpointImpl(bus, soapCertificateValidationService());
-		endpoint.publish(SOAP_CERTIFICATE_VALIDATION);
-		enableMTOM(endpoint);
-		return endpoint;
-	}
-
-	@Bean
-	public Endpoint createSoapServerSigningEndpoint() {
-		EndpointImpl endpoint = new EndpointImpl(bus, soapServerSigningService());
-		endpoint.publish(SOAP_SERVER_SIGNING);
-		enableMTOM(endpoint);
-		return endpoint;
-	}
-	
-	@Bean
-	public Endpoint createSoapRemoteTimestampEndpoint() {
-		EndpointImpl endpoint = new EndpointImpl(bus, soapTimestampService());
-		endpoint.publish(SOAP_TIMESTAMP_SERVICE);
-		enableMTOM(endpoint);
-		return endpoint;
-	}
-
-	private void addXmlAdapterDate(EndpointImpl endpoint) {
-		JAXBDataBinding jaxbDataBinding = new JAXBDataBinding();
-		jaxbDataBinding.getConfiguredXmlAdapters().add(new DateAdapter());
-		endpoint.setDataBinding(jaxbDataBinding);
-	}
-
-	private void enableMTOM(EndpointImpl endpoint) {
-		SOAPBinding binding = (SOAPBinding) endpoint.getBinding();
-		binding.setMTOMEnabled(mtomEnabled);
 	}
 
 	// --------------- REST

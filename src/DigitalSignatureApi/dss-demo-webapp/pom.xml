@@ -23,95 +23,6 @@
 		</resources>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-standalone-complete</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>eu.europa.ec.joinup.sd-dss</groupId>
-									<artifactId>dss-standalone-app-package</artifactId>
-									<classifier>complete-zip</classifier>
-									<type>zip</type>
-									<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}</outputDirectory>
-									<destFileName>/downloads/dss-app-complete-windows-x64.zip</destFileName>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-standalone-minimal</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>eu.europa.ec.joinup.sd-dss</groupId>
-									<artifactId>dss-standalone-app-package</artifactId>
-									<classifier>minimal-zip</classifier>
-									<type>zip</type>
-									<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}</outputDirectory>
-									<destFileName>/downloads/dss-app-minimal-windows-x64.zip</destFileName>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-			    <artifactId>maven-resources-plugin</artifactId>
-			    <executions>
-			        <execution>
-			            <id>copy-cookbook</id>
-						<phase>process-resources</phase>
-			            <goals>
-			                <goal>copy-resources</goal>
-			            </goals>
-			            <configuration>
-			                <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/doc</outputDirectory>
-			                <overwrite>true</overwrite>
-			                <resources>
-			                    <resource>
-			                        <directory>${dss.framework.root.directory}/dss-cookbook/target/generated-docs</directory>
-			                        <includes>
-			                            <include>**/*</include>
-			                            <include>*</include>
-			                        </includes>
-			                    </resource>
-			                </resources>
-			            </configuration>
-			        </execution>
-			        <execution>
-			            <id>copy-javadoc</id>
-						<phase>process-resources</phase>
-			            <goals>
-			                <goal>copy-resources</goal>
-			            </goals>
-			            <configuration>
-			                <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/apidocs</outputDirectory>
-			                <overwrite>true</overwrite>
-			                <resources>
-			                    <resource>
-			                        <directory>${dss.framework.root.directory}/target/site/apidocs</directory>
-			                        <includes>
-			                            <include>**/*</include>
-			                            <include>*</include>
-			                        </includes>
-			                    </resource>
-			                </resources>
-			            </configuration>
-			        </execution>
-			    </executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 	            <configuration>
@@ -213,8 +124,6 @@
 			<groupId>eu.europa.ec.joinup.sd-dss</groupId>
 			<artifactId>dss-crl-parser-stream</artifactId>
 		</dependency>
-
-		<!-- SOAP -->
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-transports-http</artifactId>
@@ -223,54 +132,6 @@
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>eu.europa.ec.joinup.sd-dss</groupId>
-			<artifactId>dss-signature-soap</artifactId>
-			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>eu.europa.ec.joinup.sd-dss</groupId>
-			<artifactId>dss-validation-soap</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>eu.europa.ec.joinup.sd-dss</groupId>
-			<artifactId>dss-certificate-validation-soap</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>eu.europa.ec.joinup.sd-dss</groupId>
-			<artifactId>dss-server-signing-soap</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>eu.europa.ec.joinup.sd-dss</groupId>
-			<artifactId>dss-timestamp-remote-soap</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		
-		<!-- Choose your PAdES implementation -->
-		<dependency>
-			<groupId>eu.europa.ec.joinup.sd-dss</groupId>
-			<artifactId>dss-pades-pdfbox</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>eu.europa.ec.joinup.sd-dss</groupId> -->
-<!-- 			<artifactId>dss-pades-openpdf</artifactId> -->
-<!-- 		</dependency> -->
-		
 		<!-- REST -->
 		
 		<dependency>
@@ -398,17 +259,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>bootstrap</artifactId>
-    		<version>4.5.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>font-awesome</artifactId>
-			<version>4.7.0</version>
-		</dependency>
 
 		<!-- http://tomcat.apache.org/whichversion.html -->
 		<dependency>
@@ -436,63 +286,5 @@
 		</dependency>
 	    
 	</dependencies>
-
-	<profiles>
-		<profile>
-			<id>run-integration-test</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-failsafe-plugin</artifactId>
-						<version>2.22.2</version>
-						<executions>
-							<execution>
-								<goals>
-									<goal>integration-test</goal>
-									<goal>verify</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<includes>
-								<include>**/*IT.java</include>
-							</includes>
-						</configuration>
-					</plugin>
-					<plugin>	
-						<groupId>org.apache.tomcat.maven</groupId>
-						<artifactId>tomcat7-maven-plugin</artifactId>
-						<configuration>
-							<path>/</path>
-							<port>8765</port>
-						</configuration>
-						<executions>
-							<execution>
-								<id>start-tomcat</id>
-								<phase>pre-integration-test</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<fork>true</fork>
-								</configuration>
-							</execution>
-							<execution>
-								<id>stop-tomcat</id>
-								<phase>post-integration-test</phase>
-								<goals>
-									<goal>shutdown</goal>
-								</goals>
-								<configuration>
-									<skipErrorOnShutdown>true</skipErrorOnShutdown>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 
 </project>
