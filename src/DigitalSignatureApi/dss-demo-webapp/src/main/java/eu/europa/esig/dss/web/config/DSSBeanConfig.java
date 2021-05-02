@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 
+import eu.europa.esig.dss.spi.x509.CommonTrustedCertificateSource;
 import org.apache.http.conn.ssl.TrustAllStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,6 @@ import eu.europa.esig.dss.service.http.commons.FileCacheDataLoader;
 import eu.europa.esig.dss.service.http.commons.OCSPDataLoader;
 import eu.europa.esig.dss.service.http.commons.SSLCertificateLoader;
 import eu.europa.esig.dss.service.http.proxy.ProxyConfig;
-import eu.europa.esig.dss.service.ocsp.JdbcCacheOCSPSource;
 import eu.europa.esig.dss.service.ocsp.OnlineOCSPSource;
 import eu.europa.esig.dss.spi.client.http.DSSFileLoader;
 import eu.europa.esig.dss.spi.client.http.IgnoreDataLoader;
@@ -77,6 +77,15 @@ public class DSSBeanConfig {
 
 	@Value("${current.oj.url}")
 	private String currentOjUrl;
+
+	@Value("${custom.keystore.type}")
+	private String customKsType;
+
+	@Value("${custom.keystore.filename}")
+	private String customKsFilename;
+
+	@Value("${custom.keystore.password}")
+	private String customKsPassword;
 
 	@Value("${oj.content.keystore.type}")
 	private String ksType;
@@ -183,8 +192,8 @@ public class DSSBeanConfig {
 		certificateVerifier.setCrlSource(cachedCRLSource());
 		certificateVerifier.setOcspSource(onlineOcspSource());
 		certificateVerifier.setDataLoader(dataLoader());
-		certificateVerifier.setTrustedCertSources(trustedListSource());
-
+		// TODO: Add trusted cert sources here
+		certificateVerifier.setTrustedCertSources(trustedListSource(), customContentKeyStore());
 		// Default configs
 		certificateVerifier.setAlertOnMissingRevocationData(new ExceptionOnStatusAlert());
 		certificateVerifier.setCheckRevocationForUntrustedChains(false);
@@ -301,6 +310,20 @@ public class DSSBeanConfig {
 			return new KeyStoreCertificateSource(new ClassPathResource(ksFilename).getFile(), ksType, ksPassword);
 		} catch (IOException e) {
 			throw new DSSException("Unable to load the file " + ksFilename, e);
+		}
+	}
+
+	@Bean
+	public CommonTrustedCertificateSource customContentKeyStore(){
+		try {
+            KeyStoreCertificateSource keystore = new KeyStoreCertificateSource(new ClassPathResource(customKsFilename).getFile(), customKsType, customKsPassword);
+
+            CommonTrustedCertificateSource trustedCertificateSource = new CommonTrustedCertificateSource();
+            trustedCertificateSource.importAsTrusted(keystore);
+
+            return trustedCertificateSource;
+        } catch (IOException e) {
+			throw new DSSException("Unable to load the file " + customKsFilename, e);
 		}
 	}
 	
