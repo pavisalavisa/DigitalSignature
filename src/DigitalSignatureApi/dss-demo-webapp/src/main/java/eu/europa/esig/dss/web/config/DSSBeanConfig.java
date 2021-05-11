@@ -9,10 +9,12 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 
+import eu.europa.esig.dss.alert.LogOnStatusAlert;
 import eu.europa.esig.dss.spi.x509.CommonTrustedCertificateSource;
 import org.apache.http.conn.ssl.TrustAllStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -193,9 +195,14 @@ public class DSSBeanConfig {
 		certificateVerifier.setOcspSource(onlineOcspSource());
 		certificateVerifier.setDataLoader(dataLoader());
 		// TODO: Add trusted cert sources here
-		certificateVerifier.setTrustedCertSources(trustedListSource(), customContentKeyStore());
+		certificateVerifier.setTrustedCertSources(/*trustedListSource(),*/ customContentKeyStore());
 		// Default configs
-		certificateVerifier.setAlertOnMissingRevocationData(new ExceptionOnStatusAlert());
+		certificateVerifier.setAlertOnMissingRevocationData(new LogOnStatusAlert(Level.WARN));
+		certificateVerifier.setAlertOnInvalidTimestamp(new LogOnStatusAlert(Level.WARN));
+		certificateVerifier.setAlertOnRevokedCertificate(new LogOnStatusAlert(Level.WARN));
+		certificateVerifier.setAlertOnNoRevocationAfterBestSignatureTime(new LogOnStatusAlert(Level.WARN));
+		certificateVerifier.setAlertOnUncoveredPOE(new LogOnStatusAlert(Level.WARN));
+
 		certificateVerifier.setCheckRevocationForUntrustedChains(false);
 
 		return certificateVerifier;
