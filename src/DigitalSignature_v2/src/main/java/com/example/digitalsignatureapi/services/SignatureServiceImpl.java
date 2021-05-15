@@ -1,5 +1,6 @@
 package com.example.digitalsignatureapi.services;
 
+import com.example.digitalsignatureapi.services.contracts.SignatureService;
 import eu.europa.esig.dss.enumerations.DigestAlgorithm;
 import eu.europa.esig.dss.enumerations.SignatureLevel;
 import eu.europa.esig.dss.model.DSSDocument;
@@ -10,7 +11,6 @@ import eu.europa.esig.dss.pades.PAdESSignatureParameters;
 import eu.europa.esig.dss.pades.signature.PAdESService;
 import eu.europa.esig.dss.token.DSSPrivateKeyEntry;
 import eu.europa.esig.dss.token.Pkcs12SignatureToken;
-import eu.europa.esig.dss.validation.CommonCertificateVerifier;
 import org.springframework.stereotype.Service;
 
 import java.security.KeyStore;
@@ -20,11 +20,16 @@ import java.util.Base64;
 import java.util.List;
 
 @Service
-public class SignatureServiceImpl {
+public class SignatureServiceImpl implements SignatureService {
 
     private final SignatureLevel DefaultSignatureLevel = SignatureLevel.PAdES_BASELINE_B;
     private final DigestAlgorithm DefaultDigestAlgorithm = DigestAlgorithm.SHA256;
-    private final String PrivateKeyAlias = "TempKey";
+
+    private final PAdESService padesService;
+
+    public SignatureServiceImpl(PAdESService padesService) {
+        this.padesService = padesService;
+    }
 
     public DSSDocument SignPdf(String b64Certificate, String password, DSSDocument document) {
         Pkcs12SignatureToken token = BuildSignatureToken(b64Certificate, password);
@@ -34,13 +39,8 @@ public class SignatureServiceImpl {
 
         PAdESSignatureParameters parameters = GetParameters(privateKey.getCertificate().getCertificate(), privateKey.getCertificateChain());
 
-        CommonCertificateVerifier commonCertificateVerifier = new CommonCertificateVerifier();
-
-        // Create PAdESService for signature
-        PAdESService service = new PAdESService(commonCertificateVerifier);
-
         // Get the SignedInfo segment that need to be signed.
-        ToBeSigned dataToSign = service.getDataToSign(document, parameters);
+        ToBeSigned dataToSign = padesService.getDataToSign(document, parameters);
 
         // This function obtains the signature value for signed information using the
         // private key and specified algorithm
@@ -48,7 +48,7 @@ public class SignatureServiceImpl {
         SignatureValue signatureValue = token.sign(dataToSign, digestAlgorithm, privateKey);
 
         // We invoke the padesService to sign the document with the signature value obtained in the previous step.
-        return service.signDocument(document, parameters, signatureValue);
+        return padesService.signDocument(document, parameters, signatureValue);
     }
 
     private Pkcs12SignatureToken BuildSignatureToken(String b64Certificate, String password) {

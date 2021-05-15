@@ -4,7 +4,7 @@ import com.example.digitalsignatureapi.common.DummyData;
 import com.example.digitalsignatureapi.common.PdfResponse;
 import com.example.digitalsignatureapi.models.requests.SignPdfRequestModel;
 import com.example.digitalsignatureapi.models.responses.SignPdfResponseModel;
-import com.example.digitalsignatureapi.services.SignatureServiceImpl;
+import com.example.digitalsignatureapi.services.contracts.SignatureService;
 import eu.europa.esig.dss.model.DSSDocument;
 import eu.europa.esig.dss.model.InMemoryDocument;
 import eu.europa.esig.dss.model.MimeType;
@@ -22,9 +22,9 @@ import java.util.Base64;
 public class SignatureController {
 
     private final DummyData dummyData;
-    private final SignatureServiceImpl signatureService;
+    private final SignatureService signatureService;
 
-    public SignatureController(DummyData dummyData, SignatureServiceImpl signatureService) {
+    public SignatureController(DummyData dummyData, SignatureService signatureService) {
         this.dummyData = dummyData;
         this.signatureService = signatureService;
     }
