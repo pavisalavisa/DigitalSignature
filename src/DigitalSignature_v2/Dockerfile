@@ -1,7 +1,7 @@
 #
 # Build stage
 #
-FROM openjdk:17-alpine AS build
+FROM openjdk AS build
 EXPOSE 8080
 WORKDIR /workspace/app
 
@@ -10,6 +10,7 @@ COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
 
+RUN chmod 755 mvnw
 RUN ./mvnw install -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
