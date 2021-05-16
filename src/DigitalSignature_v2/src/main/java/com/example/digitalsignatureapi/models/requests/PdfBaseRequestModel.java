@@ -1,9 +1,8 @@
 package com.example.digitalsignatureapi.models.requests;
 
-public class PdfRequestModel {
+public class PdfBaseRequestModel {
     private String fileName;
     private String b64Bytes;
-    private CertificateModel certificate;
 
     public String getFileName() {
         return fileName;
@@ -19,13 +18,5 @@ public class PdfRequestModel {
 
     public void setB64Bytes(String b64Bytes) {
         this.b64Bytes = b64Bytes;
-    }
-
-    public CertificateModel getCertificate() {
-        return certificate;
-    }
-
-    public void setCertificate(CertificateModel certificate) {
-        this.certificate = certificate;
     }
 }

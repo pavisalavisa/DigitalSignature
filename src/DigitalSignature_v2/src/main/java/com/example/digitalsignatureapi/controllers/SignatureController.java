@@ -1,7 +1,7 @@
 package com.example.digitalsignatureapi.controllers;
 
 import com.example.digitalsignatureapi.common.PdfResponse;
-import com.example.digitalsignatureapi.models.requests.PdfRequestModel;
+import com.example.digitalsignatureapi.models.requests.PdfSignatureRequestModel;
 import com.example.digitalsignatureapi.models.responses.PdfResponseModel;
 import com.example.digitalsignatureapi.services.contracts.SignatureService;
 import eu.europa.esig.dss.model.DSSDocument;
@@ -26,7 +26,7 @@ public class SignatureController {
     }
 
     @PostMapping("/pdf")
-    public PdfResponseModel SignPdf(@RequestBody PdfRequestModel model) {
+    public PdfResponseModel SignPdf(@RequestBody PdfSignatureRequestModel model) {
         DSSDocument documentToSign = new InMemoryDocument(Base64.getDecoder().decode(model.getB64Bytes()), model.getFileName(), MimeType.PDF);
 
         DSSDocument signedDocument = this.signatureService.SignPdf(model.getCertificate().getB64Certificate(),model.getCertificate().getCertificatePassword(), documentToSign);
@@ -38,7 +38,7 @@ public class SignatureController {
     }
 
     @PostMapping("/pdf/download")
-    public PdfResponse DownloadSignedPdf(@RequestBody PdfRequestModel model) {
+    public PdfResponse DownloadSignedPdf(@RequestBody PdfSignatureRequestModel model) {
         DSSDocument documentToSign = new InMemoryDocument(Base64.getDecoder().decode(model.getB64Bytes()), model.getFileName(), MimeType.PDF);
 
         DSSDocument signedDocument = this.signatureService.SignPdf(model.getCertificate().getB64Certificate(),model.getCertificate().getCertificatePassword(), documentToSign);
