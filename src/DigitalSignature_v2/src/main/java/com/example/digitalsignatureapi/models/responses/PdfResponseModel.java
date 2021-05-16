@@ -1,6 +1,6 @@
 package com.example.digitalsignatureapi.models.responses;
 
-public class SignPdfResponseModel {
+public class PdfResponseModel {
     private String fileName;
     private String signedB64Bytes;
 

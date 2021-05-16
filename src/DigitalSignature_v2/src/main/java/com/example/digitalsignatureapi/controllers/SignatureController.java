@@ -2,8 +2,8 @@ package com.example.digitalsignatureapi.controllers;
 
 import com.example.digitalsignatureapi.common.DummyData;
 import com.example.digitalsignatureapi.common.PdfResponse;
-import com.example.digitalsignatureapi.models.requests.SignPdfRequestModel;
-import com.example.digitalsignatureapi.models.responses.SignPdfResponseModel;
+import com.example.digitalsignatureapi.models.requests.PdfRequestModel;
+import com.example.digitalsignatureapi.models.responses.PdfResponseModel;
 import com.example.digitalsignatureapi.services.contracts.SignatureService;
 import eu.europa.esig.dss.model.DSSDocument;
 import eu.europa.esig.dss.model.InMemoryDocument;
@@ -30,19 +30,19 @@ public class SignatureController {
     }
 
     @PostMapping("/pdf")
-    public SignPdfResponseModel SignPdf(@RequestBody SignPdfRequestModel model) throws IOException {
+    public PdfResponseModel SignPdf(@RequestBody PdfRequestModel model) throws IOException {
         DSSDocument documentToSign = new InMemoryDocument(Base64.getDecoder().decode(model.getB64Bytes()), model.getFileName(), MimeType.PDF);
 
         DSSDocument signedDocument = this.signatureService.SignPdf(dummyData.GetB64Cert(), dummyData.CertificatePassword, documentToSign);
 
-        return new SignPdfResponseModel(){{
+        return new PdfResponseModel(){{
             setFileName("signed" + model.getFileName());
             setSignedB64Bytes(Base64.getEncoder().encodeToString(DSSUtils.toByteArray(signedDocument)));
         }};
     }
 
     @PostMapping("/pdf/download")
-    public PdfResponse DownloadSignedPdf(@RequestBody SignPdfRequestModel model) throws IOException {
+    public PdfResponse DownloadSignedPdf(@RequestBody PdfRequestModel model) throws IOException {
         DSSDocument documentToSign = new InMemoryDocument(Base64.getDecoder().decode(model.getB64Bytes()), model.getFileName(), MimeType.PDF);
 
         DSSDocument signedDocument = this.signatureService.SignPdf(dummyData.GetB64Cert(), dummyData.CertificatePassword, documentToSign);
