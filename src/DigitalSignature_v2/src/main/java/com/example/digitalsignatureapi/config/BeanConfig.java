@@ -9,6 +9,7 @@ import eu.europa.esig.dss.spi.x509.CommonTrustedCertificateSource;
 import eu.europa.esig.dss.spi.x509.KeyStoreCertificateSource;
 import eu.europa.esig.dss.validation.CertificateVerifier;
 import eu.europa.esig.dss.validation.CommonCertificateVerifier;
+import eu.europa.esig.dss.xades.signature.XAdESService;
 import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -54,6 +55,11 @@ public class BeanConfig {
     @Bean
     public PAdESService padesService() {
         return new PAdESService(certificateVerifier());
+    }
+
+    @Bean
+    public XAdESService xadesService() {
+        return new XAdESService(certificateVerifier());
     }
 
     @Bean

@@ -1,6 +1,6 @@
 package com.example.digitalsignatureapi.models.requests;
 
-public class PdfBaseRequestModel {
+public class BaseFileRequestModel {
     private String fileName;
     private String b64Bytes;
 

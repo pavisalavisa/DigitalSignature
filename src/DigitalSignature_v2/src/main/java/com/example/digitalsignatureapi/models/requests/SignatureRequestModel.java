@@ -1,6 +1,6 @@
 package com.example.digitalsignatureapi.models.requests;
 
-public class PdfSignatureRequestModel extends PdfBaseRequestModel {
+public class SignatureRequestModel extends BaseFileRequestModel {
     private CertificateModel certificate;
 
     public CertificateModel getCertificate() {

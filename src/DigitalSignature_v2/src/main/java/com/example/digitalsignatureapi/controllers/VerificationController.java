@@ -1,6 +1,6 @@
 package com.example.digitalsignatureapi.controllers;
 
-import com.example.digitalsignatureapi.models.requests.PdfBaseRequestModel;
+import com.example.digitalsignatureapi.models.requests.BaseFileRequestModel;
 import com.example.digitalsignatureapi.services.contracts.VerificationService;
 import eu.europa.esig.dss.model.DSSDocument;
 import eu.europa.esig.dss.model.InMemoryDocument;
@@ -24,7 +24,7 @@ public class VerificationController {
         }
 
         @PostMapping("/pdf")
-        public SimpleReport VerifySignedPdf(@RequestBody PdfBaseRequestModel model) {
+        public SimpleReport VerifySignedPdf(@RequestBody BaseFileRequestModel model) {
                 DSSDocument documentToSign = new InMemoryDocument(Base64.getDecoder().decode(model.getB64Bytes()), model.getFileName(), MimeType.PDF);
 
                 return this.verificationService.VerifySignedPdf(documentToSign);
