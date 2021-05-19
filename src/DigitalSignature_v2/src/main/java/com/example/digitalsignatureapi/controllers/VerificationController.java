@@ -17,16 +17,16 @@ import java.util.Base64;
 @RequestMapping(path = "${v1API}/verification")
 public class VerificationController {
 
-        private final VerificationService verificationService;
+    private final VerificationService verificationService;
 
-        public VerificationController(VerificationService verificationService) {
-                this.verificationService = verificationService;
-        }
+    public VerificationController(VerificationService verificationService) {
+        this.verificationService = verificationService;
+    }
 
-        @PostMapping("/pdf")
-        public SimpleReport VerifySignedPdf(@RequestBody BaseFileRequestModel model) {
-                DSSDocument documentToSign = new InMemoryDocument(Base64.getDecoder().decode(model.getB64Bytes()), model.getFileName(), MimeType.PDF);
+    @PostMapping("/pdf")
+    public SimpleReport VerifySignedPdf(@RequestBody BaseFileRequestModel model) {
+        DSSDocument documentToSign = new InMemoryDocument(Base64.getDecoder().decode(model.getB64Bytes()), model.getFileName(), MimeType.PDF);
 
-                return this.verificationService.VerifySignedPdf(documentToSign);
-        }
+        return this.verificationService.VerifySignedPdf(documentToSign);
+    }
 }

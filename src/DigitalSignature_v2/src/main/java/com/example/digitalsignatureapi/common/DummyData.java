@@ -12,19 +12,17 @@ import java.nio.file.Paths;
 @Component
 public class DummyData {
 
+    public final String CertificatePassword = "admin123!";
     @Value("classpath:AK_cert.txt")
     private Resource B64Certificate;
-
     @Value("classpath:ExamplePdf.txt")
     private Resource ExamplePdfB64;
 
-    public final String CertificatePassword = "admin123!";
-
     public String GetB64Cert() throws IOException {
-        return Files.readString(Paths.get(B64Certificate.getURI()),StandardCharsets.UTF_8);
+        return Files.readString(Paths.get(B64Certificate.getURI()), StandardCharsets.UTF_8);
     }
 
     public String GetExamplePdf() throws IOException {
-        return Files.readString(Paths.get(ExamplePdfB64.getURI()),StandardCharsets.UTF_8);
+        return Files.readString(Paths.get(ExamplePdfB64.getURI()), StandardCharsets.UTF_8);
     }
 }

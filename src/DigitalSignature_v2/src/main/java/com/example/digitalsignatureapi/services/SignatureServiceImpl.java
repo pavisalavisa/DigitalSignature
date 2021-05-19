@@ -5,7 +5,6 @@ import eu.europa.esig.dss.enumerations.DigestAlgorithm;
 import eu.europa.esig.dss.enumerations.SignatureLevel;
 import eu.europa.esig.dss.enumerations.SignaturePackaging;
 import eu.europa.esig.dss.model.DSSDocument;
-import eu.europa.esig.dss.model.InMemoryDocument;
 import eu.europa.esig.dss.model.SignatureValue;
 import eu.europa.esig.dss.model.ToBeSigned;
 import eu.europa.esig.dss.model.x509.CertificateToken;
@@ -56,7 +55,7 @@ public class SignatureServiceImpl implements SignatureService {
         return padesService.signDocument(document, parameters, signatureValue);
     }
 
-    public DSSDocument SignBinary(String b64Certificate, String password, DSSDocument document){
+    public DSSDocument SignBinary(String b64Certificate, String password, DSSDocument document) {
         Pkcs12SignatureToken token = BuildSignatureToken(b64Certificate, password);
         DSSPrivateKeyEntry privateKey = GetPrivateKey(token);
 
@@ -74,7 +73,7 @@ public class SignatureServiceImpl implements SignatureService {
         return signedDocument;
     }
 
-    private DSSPrivateKeyEntry GetPrivateKey(Pkcs12SignatureToken token){
+    private DSSPrivateKeyEntry GetPrivateKey(Pkcs12SignatureToken token) {
         List<DSSPrivateKeyEntry> privateKeys = token.getKeys();
 
         return privateKeys.get(0);
@@ -86,7 +85,7 @@ public class SignatureServiceImpl implements SignatureService {
         return new Pkcs12SignatureToken(certificateBytes, new KeyStore.PasswordProtection(password.toCharArray()));
     }
 
-    private PAdESSignatureParameters GetPadesParameters(X509Certificate certificate, CertificateToken[] certificateChain){
+    private PAdESSignatureParameters GetPadesParameters(X509Certificate certificate, CertificateToken[] certificateChain) {
         PAdESSignatureParameters parameters = new PAdESSignatureParameters();
 
         // We choose the level of the signature (-B, -T, -LT, -LTA).
@@ -108,7 +107,7 @@ public class SignatureServiceImpl implements SignatureService {
         return parameters;
     }
 
-    private XAdESSignatureParameters GetXadesParameters(X509Certificate certificate, CertificateToken[] certificateChain){
+    private XAdESSignatureParameters GetXadesParameters(X509Certificate certificate, CertificateToken[] certificateChain) {
         XAdESSignatureParameters parameters = new XAdESSignatureParameters();
         parameters.setSignatureLevel(DefaultXadesSignatureLevel);
         // We choose the type of the signature packaging (ENVELOPED, ENVELOPING, DETACHED).
@@ -123,4 +122,5 @@ public class SignatureServiceImpl implements SignatureService {
         parameters.setCertificateChain(Arrays.asList(certificateChain));
 
         return parameters;
-    }}
+    }
+}
