@@ -32,7 +32,7 @@ public class SignatureController {
         DSSDocument signedDocument = this.signatureService.SignPdf(model.getCertificate().getB64Certificate(), model.getCertificate().getCertificatePassword(), documentToSign);
 
         return new SignedFileResponseModel() {{
-            setFileName("signed" + model.getFileName());
+            setFileName(signedDocument.getName());
             setSignedB64Bytes(Base64.getEncoder().encodeToString(DSSUtils.toByteArray(signedDocument)));
         }};
     }
@@ -54,7 +54,7 @@ public class SignatureController {
                 getCertificate().getCertificatePassword(), documentToSign);
 
         return new SignedFileResponseModel() {{
-            setFileName("signed" + model.getFileName());
+            setFileName(signedDocument.getName());
             setSignedB64Bytes(Base64.getEncoder().encodeToString(DSSUtils.toByteArray(signedDocument)));
         }};
     }

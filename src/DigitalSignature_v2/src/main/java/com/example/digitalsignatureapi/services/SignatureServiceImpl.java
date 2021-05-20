@@ -111,7 +111,7 @@ public class SignatureServiceImpl implements SignatureService {
         XAdESSignatureParameters parameters = new XAdESSignatureParameters();
         parameters.setSignatureLevel(DefaultXadesSignatureLevel);
         // We choose the type of the signature packaging (ENVELOPED, ENVELOPING, DETACHED).
-        parameters.setSignaturePackaging(SignaturePackaging.ENVELOPED);
+        parameters.setSignaturePackaging(SignaturePackaging.DETACHED);
         // We set the digest algorithm to use with the signature algorithm. You must use the
         // same parameter when you invoke the method sign on the token. The default value is
         //SHA256
