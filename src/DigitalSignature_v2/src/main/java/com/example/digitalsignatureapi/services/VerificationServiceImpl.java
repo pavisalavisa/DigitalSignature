@@ -11,6 +11,8 @@ import eu.europa.esig.dss.validation.executor.ValidationLevel;
 import eu.europa.esig.dss.validation.reports.Reports;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 @Service
 public class VerificationServiceImpl implements VerificationService {
     private final CertificateVerifier certificateVerifier;
@@ -28,6 +30,20 @@ public class VerificationServiceImpl implements VerificationService {
         validator.setValidationLevel(ValidationLevel.BASIC_SIGNATURES);
         validator.setCertificateVerifier(this.certificateVerifier);
         validator.setTokenExtractionStrategy(TokenExtractionStrategy.EXTRACT_CERTIFICATES_ONLY);
+
+        Reports reports = validator.validateDocument(this.validationPolicy);
+
+        return reports.getSimpleReport();
+    }
+
+    @Override
+    public SimpleReport VerifySignedBinary(DSSDocument originalDocument, DSSDocument xadesSignature) {
+        SignedDocumentValidator validator = SignedDocumentValidator.fromDocument(xadesSignature);
+
+        validator.setValidationLevel(ValidationLevel.BASIC_SIGNATURES);
+        validator.setCertificateVerifier(this.certificateVerifier);
+        validator.setTokenExtractionStrategy(TokenExtractionStrategy.EXTRACT_CERTIFICATES_ONLY);
+        validator.setDetachedContents(Arrays.asList(originalDocument));
 
         Reports reports = validator.validateDocument(this.validationPolicy);
 

@@ -68,9 +68,8 @@ public class SignatureServiceImpl implements SignatureService {
         SignatureValue signatureValue = token.sign(dataToSign, parameters.getDigestAlgorithm(), privateKey);
         // We invoke the service to sign the document with the signature value obtained in
         // the previous step.
-        DSSDocument signedDocument = xadesService.signDocument(document, parameters, signatureValue);
 
-        return signedDocument;
+        return xadesService.signDocument(document, parameters, signatureValue);
     }
 
     private DSSPrivateKeyEntry GetPrivateKey(Pkcs12SignatureToken token) {
