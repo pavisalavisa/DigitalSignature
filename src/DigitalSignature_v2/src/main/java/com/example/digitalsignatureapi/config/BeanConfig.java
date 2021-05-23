@@ -5,8 +5,11 @@ import eu.europa.esig.dss.model.DSSException;
 import eu.europa.esig.dss.pades.signature.PAdESService;
 import eu.europa.esig.dss.policy.ValidationPolicy;
 import eu.europa.esig.dss.policy.ValidationPolicyFacade;
+import eu.europa.esig.dss.service.http.commons.TimestampDataLoader;
+import eu.europa.esig.dss.service.tsp.OnlineTSPSource;
 import eu.europa.esig.dss.spi.x509.CommonTrustedCertificateSource;
 import eu.europa.esig.dss.spi.x509.KeyStoreCertificateSource;
+import eu.europa.esig.dss.spi.x509.tsp.TSPSource;
 import eu.europa.esig.dss.validation.CertificateVerifier;
 import eu.europa.esig.dss.validation.CommonCertificateVerifier;
 import eu.europa.esig.dss.xades.signature.XAdESService;
@@ -36,6 +39,9 @@ public class BeanConfig {
     @Value("classpath:customValidationPolicy.xml")
     private Resource CustomValidationPolicy;
 
+    @Value("${tspServerUri}")
+    private String tspServer;
+
     @Bean
     public CertificateVerifier certificateVerifier() {
         CommonCertificateVerifier certificateVerifier = new CommonCertificateVerifier();
@@ -53,13 +59,27 @@ public class BeanConfig {
     }
 
     @Bean
+    public TSPSource tspSource() {
+        OnlineTSPSource tspSource = new OnlineTSPSource(tspServer);
+        tspSource.setDataLoader(new TimestampDataLoader());
+
+        return tspSource;
+    }
+
+    @Bean
     public PAdESService padesService() {
-        return new PAdESService(certificateVerifier());
+        PAdESService service = new PAdESService(certificateVerifier());
+        service.setTspSource(tspSource());
+
+        return service;
     }
 
     @Bean
     public XAdESService xadesService() {
-        return new XAdESService(certificateVerifier());
+        XAdESService service = new XAdESService(certificateVerifier());
+        service.setTspSource(tspSource());
+
+        return service;
     }
 
     @Bean

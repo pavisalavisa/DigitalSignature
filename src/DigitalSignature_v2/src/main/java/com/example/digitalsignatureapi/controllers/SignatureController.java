@@ -29,7 +29,7 @@ public class SignatureController {
     public SignedFileResponseModel SignPdf(@RequestBody SignatureRequestModel model) {
         DSSDocument documentToSign = new InMemoryDocument(Base64.getDecoder().decode(model.getB64Bytes()), model.getFileName(), MimeType.PDF);
 
-        DSSDocument signedDocument = this.signatureService.SignPdf(model.getCertificate().getB64Certificate(), model.getCertificate().getCertificatePassword(), documentToSign);
+        DSSDocument signedDocument = this.signatureService.SignPdf(model.getCertificate(), documentToSign, model.isIncludeTimestamp());
 
         return new SignedFileResponseModel() {{
             setFileName(signedDocument.getName());
@@ -41,7 +41,7 @@ public class SignatureController {
     public PdfResponse DownloadSignedPdf(@RequestBody SignatureRequestModel model) {
         DSSDocument documentToSign = new InMemoryDocument(Base64.getDecoder().decode(model.getB64Bytes()), model.getFileName(), MimeType.PDF);
 
-        DSSDocument signedDocument = this.signatureService.SignPdf(model.getCertificate().getB64Certificate(), model.getCertificate().getCertificatePassword(), documentToSign);
+        DSSDocument signedDocument = this.signatureService.SignPdf(model.getCertificate(), documentToSign, model.isIncludeTimestamp());
 
         return PdfResponse.Create(DSSUtils.toByteArray(signedDocument), "signed" + model.getFileName());
     }
@@ -50,8 +50,7 @@ public class SignatureController {
     public SignedFileResponseModel SignBinaryData(@RequestBody SignatureRequestModel model) {
         DSSDocument documentToSign = new InMemoryDocument(Base64.getDecoder().decode(model.getB64Bytes()), model.getFileName(), MimeType.BINARY);
 
-        DSSDocument signedDocument = this.signatureService.SignBinary(model.getCertificate().getB64Certificate(), model.
-                getCertificate().getCertificatePassword(), documentToSign);
+        DSSDocument signedDocument = this.signatureService.SignBinary(model.getCertificate(), documentToSign, model.isIncludeTimestamp());
 
         return new SignedFileResponseModel() {{
             setFileName(signedDocument.getName());
