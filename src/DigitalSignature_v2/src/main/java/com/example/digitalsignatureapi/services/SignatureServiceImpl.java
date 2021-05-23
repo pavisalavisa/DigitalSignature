@@ -35,6 +35,8 @@ public class SignatureServiceImpl implements SignatureService {
 
     private final DigestAlgorithm DefaultDigestAlgorithm = DigestAlgorithm.SHA256;
 
+    private final int SignatureSize = 20000;
+
     private final PAdESService padesService;
     private final XAdESService xadesService;
 
@@ -104,6 +106,7 @@ public class SignatureServiceImpl implements SignatureService {
         // same parameter when you invoke the method sign on the token. The default value is
         // SHA256
         parameters.setDigestAlgorithm(DefaultDigestAlgorithm);
+        parameters.setContentSize(SignatureSize);
 
         // We set the signing certificate
         CertificateToken token = new CertificateToken(certificate);
@@ -121,8 +124,7 @@ public class SignatureServiceImpl implements SignatureService {
         // We choose the type of the signature packaging (ENVELOPED, ENVELOPING, DETACHED).
         parameters.setSignaturePackaging(SignaturePackaging.DETACHED);
         // We set the digest algorithm to use with the signature algorithm. You must use the
-        // same parameter when you invoke the method sign on the token. The default value is
-        //SHA256
+        // same parameter when you invoke the method sign on the token.
         parameters.setDigestAlgorithm(DefaultDigestAlgorithm);
 
         CertificateToken token = new CertificateToken(certificate);
