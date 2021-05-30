@@ -1,4 +1,6 @@
-﻿using Application.Common.ErrorManagement.ErrorCodes;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
+using Application.Common.ErrorManagement.ErrorCodes;
 using Common.Extensions;
 using FluentValidation;
 
@@ -21,6 +23,25 @@ namespace Application.Users.Commands.AssignCertificate
                 RuleFor(x=>x.CertificatePassword)
                     .NotEmpty()
                     .WithCodedErrorMessage(CertificateErrorCodes.InvalidCertificateModel with{ Details = "Certificate password must be provided."});
+
+                RuleFor(x => x)
+                    .Must(ValidX509Certificate)
+                    .WithCodedErrorMessage(CertificateErrorCodes.InvalidCertificateBytes with {Details = "The provided b64 string is not a valid X509 certificate."});
+            }
+
+            private bool ValidX509Certificate(CertificateAssignmentModel model)
+            {
+                try
+                {
+                    // ReSharper disable once ObjectCreationAsStatement
+                    new X509Certificate(Convert.FromBase64String(model.B64Certificate), model.CertificatePassword);
+
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
     }

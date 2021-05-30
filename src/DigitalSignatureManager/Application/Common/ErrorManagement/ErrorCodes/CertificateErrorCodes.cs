@@ -7,5 +7,6 @@ namespace Application.Common.ErrorManagement.ErrorCodes
         public static readonly CodedError Unknown = new CodedError("C001", "Unknown certificate error");
         public static readonly CodedError InvalidCertificateFilter = new CodedError("C002", "Invalid certificate filter");
         public static readonly CodedError InvalidCertificateModel = new CodedError("C003", "Invalid certificate model");
+        public static readonly CodedError InvalidCertificateBytes = new CodedError("C004", "Invalid certificate bytes provided");
     }
 }
