@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,6 +39,9 @@ namespace Infrastructure.Persistence
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             // Run interceptors, dispatch events, ...
+
+            ApplyAuditingTimestamps();
+
             var result = await base.SaveChangesAsync(cancellationToken);
 
             return result;
@@ -48,6 +52,21 @@ namespace Infrastructure.Persistence
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             base.OnModelCreating(builder);
+        }
+
+        private void ApplyAuditingTimestamps()
+        {
+            foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+            {
+                if (entry.State == EntityState.Modified)
+                {
+                    entry.Entity.Updated = DateTime.UtcNow;
+                }
+                else if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.Created = DateTime.UtcNow;
+                }
+            }
         }
     }
 }
