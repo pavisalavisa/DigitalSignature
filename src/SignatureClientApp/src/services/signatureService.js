@@ -12,7 +12,7 @@ export const signBinary = async (file, includeTimestamp = false) => {
   return await sign(file, includeTimestamp, "binary", "json");
 };
 
-const sign = (file, includeTimestamp, route, responseType) => {
+const sign = async (file, includeTimestamp, route, responseType) => {
   const b64Data = await fileToBase64(file);
 
   const requestModel = {

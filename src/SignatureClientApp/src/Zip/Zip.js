@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { signBinary } from "../services/signatureService";
+import {saveAs} from "file-saver"
 
 import "./zip.css";
 
