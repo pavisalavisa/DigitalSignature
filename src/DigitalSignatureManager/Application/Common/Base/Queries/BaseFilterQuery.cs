@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Common.Contracts;
 using Application.Common.Models;
 using Domain.Common;
+using Domain.Common.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 

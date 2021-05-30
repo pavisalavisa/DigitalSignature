@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Domain.Common.Base;
+using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Common
 {

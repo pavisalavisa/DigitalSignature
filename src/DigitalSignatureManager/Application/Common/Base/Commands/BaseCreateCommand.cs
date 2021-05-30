@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Application.Common.Contracts;
 using Application.Common.Models;
 using Domain.Common;
+using Domain.Common.Base;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Common.Base.Commands

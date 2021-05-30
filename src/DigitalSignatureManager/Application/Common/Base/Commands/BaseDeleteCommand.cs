@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Application.Common.Contracts;
 using Domain.Common;
+using Domain.Common.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 

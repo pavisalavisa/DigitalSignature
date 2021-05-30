@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Application.Common.Base.Queries;
 using Application.Common.Models;
 using Domain.Common;
+using Domain.Common.Base;
 using Infrastructure.Persistence;
 using Microsoft.Extensions.Logging;
 using Moq;
