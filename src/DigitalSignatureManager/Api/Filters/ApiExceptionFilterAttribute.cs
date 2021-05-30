@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Application.Common.Exceptions;
+using Application.Common.ErrorManagement.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+
 #pragma warning disable 1591
 
 namespace Api.Filters
@@ -17,8 +18,9 @@ namespace Api.Filters
             // Register known exception types and handlers.
             _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
             {
-                { typeof(NotFoundException), HandleNotFoundException },
-                { typeof(ApplicationException), HandleApplicationException}
+                {typeof(NotFoundException), HandleNotFoundException},
+                {typeof(ApplicationException), HandleApplicationException},
+                {typeof(BusinessException), HandleBusinessException}
             };
         }
 
@@ -63,7 +65,7 @@ namespace Api.Filters
 
             context.ExceptionHandled = true;
         }
-        
+
         private void HandleInvalidModelStateException(ExceptionContext context)
         {
             var details = new ValidationProblemDetails(context.ModelState)
@@ -92,7 +94,7 @@ namespace Api.Filters
 
             context.ExceptionHandled = true;
         }
-        
+
         private void HandleApplicationException(ExceptionContext context)
         {
             var exception = context.Exception as ApplicationException;
@@ -103,6 +105,24 @@ namespace Api.Filters
                 Title = "Application exception occurred.",
                 // ReSharper disable once PossibleNullReferenceException
                 Detail = exception.Message,
+                Status = StatusCodes.Status400BadRequest
+            };
+
+            context.Result = new BadRequestObjectResult(details);
+
+            context.ExceptionHandled = true;
+        }
+
+        private void HandleBusinessException(ExceptionContext context)
+        {
+            var exception = context.Exception as BusinessException;
+
+            var details = new ProblemDetails
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Title = exception.Message,
+                // ReSharper disable once PossibleNullReferenceException
+                Detail = exception.GetDetails(),
                 Status = StatusCodes.Status400BadRequest
             };
 

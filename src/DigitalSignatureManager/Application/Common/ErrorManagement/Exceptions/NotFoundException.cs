@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Application.Common.Exceptions
+namespace Application.Common.ErrorManagement.Exceptions
 {
     // Example exception that could be used in the application layer
     // Paired with exception handling logic in the API layer
