@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Api.Filters
 {
+    // ReSharper disable once ClassNeverInstantiated.Global Justification: Used by the framework
     public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
         private readonly ILogger<ApiExceptionFilterAttribute> _logger;

@@ -1,4 +1,5 @@
 ﻿using Application.Certificates.Queries;
+using Application.Signature.Queries.GetSignatureServiceHealth;
 using Application.Users.Commands.AssignCertificate;
 using Application.Users.Commands.DeleteUser;
 using Application.Users.Commands.RegisterUser;
@@ -15,6 +16,7 @@ namespace Application
         {
             AddUserServices(services);
             AddCertificateServices(services);
+            AddSignatureServices(services);
 
             return services;
         }
@@ -32,6 +34,11 @@ namespace Application
         private static void AddCertificateServices(IServiceCollection services)
         {
             services.AddScoped<IGetAllCertificatesQuery, GetAllCertificatesQuery>();
+        }
+
+        private static void AddSignatureServices(IServiceCollection services)
+        {
+            services.AddScoped<IGetSignatureServiceHealth, GetSignatureServiceHealth>();
         }
     }
 }
