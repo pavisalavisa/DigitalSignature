@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Application.Common.Models;
+using Application.Users.Commands.AssignCertificate;
 using Application.Users.Commands.DeleteUser;
 using Application.Users.Commands.RegisterUser;
 using Application.Users.Commands.UpdateUser;
@@ -25,9 +26,7 @@ namespace Api.Controllers
         ///     POST /api/Users/Registration
         ///     {
         ///        "email": "jon.doe@gmail.com",
-        ///        "password": "UberHardPassword123!",
-        ///        "country": "Italy",
-        ///        "teamName": "Juventus"
+        ///        "password": "UberHardPassword123!"
         ///     }
         ///
         /// </remarks>
@@ -138,6 +137,34 @@ namespace Api.Controllers
             await command.Execute(id);
 
             return NoContent();
+        }
+
+        /// <summary>
+        /// Assigns the provided certificate to the authenticated user.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /api/Users/Certificate
+        ///     {
+        ///        "b64Certificate": "Ik15Q2VydGlmaWNhdGUiIA0K",
+        ///        "certificatePassword": "UberHardPassword123!"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="model">Certificate request model</param>
+        /// <returns>Ok with empty json body</returns>
+        /// <response code ="200">Certificate was successfully assigned</response>
+        /// <response code ="400">Validation error happened</response>
+        /// <response code ="401">Authentication error happened</response>
+        [HttpPost]
+        [Authorize(Roles = "Admin, RegularUser")]
+        [Route("Certificate")]
+        public async Task<ActionResult> PostCertificate(CertificateAssignmentModel model, [FromServices] IAssignCertificateCommand command)
+        {
+            await command.Execute(model);
+
+            return Ok();
         }
     }
 }

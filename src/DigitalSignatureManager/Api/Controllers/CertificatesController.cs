@@ -27,7 +27,7 @@ namespace Api.Controllers
         [Produces("application/json")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<PagingResultModel<CertificateModel>>> Get(
-                [FromQuery] CertificateFilterModel filterModel,
+            [FromQuery] CertificateFilterModel filterModel,
             [FromServices] IGetAllCertificatesQuery query)
         {
             return Ok(await query.Query(filterModel));

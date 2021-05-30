@@ -24,7 +24,7 @@ namespace UnitTests.Application.Users
         [Test]
         public void GivenEmptyEmailAddress_Validate_ShouldHaveAValidationError()
         {
-            var model = new RegisterUserModel {Email = null, Password = "SuperbPassword.123", Country = "Italy", TeamName = "Juventus"};
+            var model = new RegisterUserModel {Email = null, Password = "SuperbPassword.123"};
 
             var result = _validator.Validate(model);
 
@@ -35,7 +35,7 @@ namespace UnitTests.Application.Users
         [Test]
         public void GivenInvalidEmailAddress_Validate_ShouldHaveAValidationError()
         {
-            var model = new RegisterUserModel {Email = "colin.fgmail", Password = "SuperbPassword.123", Country = "Italy", TeamName = "Juventus"};
+            var model = new RegisterUserModel {Email = "colin.fgmail", Password = "SuperbPassword.123"};
 
             var result = _validator.Validate(model);
 
@@ -46,7 +46,7 @@ namespace UnitTests.Application.Users
         [Test]
         public void GivenExistingEmailAddress_Validate_ShouldHaveAValidationError()
         {
-            var model = new RegisterUserModel {Email = "colin.f@gmail.com", Password = "SuperbPassword.123", Country = "Italy", TeamName = "Juventus"};
+            var model = new RegisterUserModel {Email = "colin.f@gmail.com", Password = "SuperbPassword.123"};
 
             _userManager.Setup(x => x.EmailExists("colin.f@gmail.com")).ReturnsAsync(true);
 
@@ -62,7 +62,7 @@ namespace UnitTests.Application.Users
         [TestCase("Password!")]
         public void GivenWeakPassword_Validate_ShouldHaveAValidationError(string password)
         {
-            var model = new RegisterUserModel {Email = "colin.f@gmail.com", Password = password, Country = "Italy", TeamName = "Juventus"};
+            var model = new RegisterUserModel {Email = "colin.f@gmail.com", Password = password};
 
             var result = _validator.Validate(model);
 
@@ -76,7 +76,7 @@ namespace UnitTests.Application.Users
         [TestCase(null)]
         public void GivenEmptyCountry_Validate_ShouldHaveAValidationError(string country)
         {
-            var model = new RegisterUserModel {Email = "colin.f@gmail.com", Password = "Admin.123!", Country = country, TeamName = "Juventus"};
+            var model = new RegisterUserModel {Email = "colin.f@gmail.com", Password = "Admin.123!"};
 
             var result = _validator.Validate(model);
 
@@ -90,7 +90,7 @@ namespace UnitTests.Application.Users
         [TestCase(null)]
         public void GivenEmptyTeamName_Validate_ShouldHaveAValidationError(string teamName)
         {
-            var model = new RegisterUserModel {Email = "colin.f@gmail.com", Password = "Admin.123!", Country = "Italy", TeamName = teamName};
+            var model = new RegisterUserModel {Email = "colin.f@gmail.com", Password = "Admin.123!"};
 
             var result = _validator.Validate(model);
 

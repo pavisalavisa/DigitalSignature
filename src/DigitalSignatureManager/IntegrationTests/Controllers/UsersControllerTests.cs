@@ -15,7 +15,7 @@ namespace IntegrationTests.Controllers
         [Test]
         public async Task PostRegistration_WithCorrectModel_ShouldReturnCreated()
         {
-            var model = new RegisterUserModel {Email = "jane.doe@gmail.com", Password = "superHardPassword123.", Country = "France", TeamName = "Lyon"};
+            var model = new RegisterUserModel {Email = "jane.doe@gmail.com", Password = "superHardPassword123."};
             var response = await Client.PostAsync("/api/Users/Registration", JsonContent.Create(model));
 
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Common.Contracts;
 using Domain.Common;
 using Domain.Common.Base;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ namespace Infrastructure.Persistence
         {
         }
 
+        public DbSet<Certificate> Certificates { get; set; }
         public DbSet<T> EntitySet<T>() where T : class, IEntity => Set<T>();
 
         public IQueryable<T> EagerlyLoadedEntities<T>() where T : class, IEntity

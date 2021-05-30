@@ -1,4 +1,6 @@
-﻿using Application.Users.Commands.DeleteUser;
+﻿using Application.Certificates.Queries;
+using Application.Users.Commands.AssignCertificate;
+using Application.Users.Commands.DeleteUser;
 using Application.Users.Commands.RegisterUser;
 using Application.Users.Commands.UpdateUser;
 using Application.Users.Queries.GetAllUsers;
@@ -11,14 +13,25 @@ namespace Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            //Users
+            AddUserServices(services);
+            AddCertificateServices(services);
+
+            return services;
+        }
+
+        private static void AddUserServices(IServiceCollection services)
+        {
             services.AddScoped<IRegisterUserCommand, RegisterUserCommand>();
             services.AddScoped<IGetAllUsersQuery, GetAllUsersQuery>();
             services.AddScoped<IGetUserByIdQuery, GetUserByIdQuery>();
             services.AddScoped<IUpdateUserCommand, UpdateUserCommand>();
             services.AddScoped<IDeleteUserCommand, DeleteUserCommand>();
+            services.AddScoped<IAssignCertificateCommand, AssignCertificateCommand>();
+        }
 
-            return services;
+        private static void AddCertificateServices(IServiceCollection services)
+        {
+            services.AddScoped<IGetAllCertificatesQuery, GetAllCertificatesQuery>();
         }
     }
 }
