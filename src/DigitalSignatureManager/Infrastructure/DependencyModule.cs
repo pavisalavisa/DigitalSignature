@@ -1,6 +1,7 @@
 ﻿using System;
 using Application.Common.Contracts;
 using Domain.Common;
+using Infrastructure.Certificates;
 using Infrastructure.DigitalSignature;
 using Infrastructure.Identity.Services;
 using Infrastructure.Persistence;
@@ -25,6 +26,7 @@ namespace Infrastructure
             services.AddScoped<IDigitalSignatureManagerDbContext>(provider => provider.GetService<DigitalSignatureManagerDbContext>());
             services.AddScoped<IDigitalSignatureService, DigitalSignatureService>();
             services.AddScoped<IRestClient, RestClient>();
+            services.AddScoped<ICertificateService, CertificateService>();
             services.AddIdentityServices();
             
             return services;

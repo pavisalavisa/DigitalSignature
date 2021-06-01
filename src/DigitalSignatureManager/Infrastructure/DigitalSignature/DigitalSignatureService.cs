@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Application.Common.Contracts;
 using Application.Common.ErrorManagement.Exceptions;
+using Application.Common.Models.DigitalSignatureModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RestSharp;
@@ -27,17 +28,14 @@ namespace Infrastructure.DigitalSignature
             _restClient.BaseUrl = new Uri(digitalSignatureServiceBaseUri);
         }
 
-        public async Task SignPdf()
+        public async Task<InternalSignatureResponseModel> SignPdf(InternalSignatureRequestModel requestModel)
         {
-
-            // var response = await _restClient.ExecutePostAsync<>();
-
-            throw new System.NotImplementedException();
+            return await PostRequest<InternalSignatureResponseModel>(requestModel, "pdf");
         }
 
-        public Task SignBinary()
+        public async Task<InternalSignatureResponseModel> SignBinary(InternalSignatureRequestModel requestModel)
         {
-            throw new System.NotImplementedException();
+            return await PostRequest<InternalSignatureResponseModel>(requestModel, "binary");
         }
 
         public Task VerifyPdf()
@@ -48,6 +46,21 @@ namespace Infrastructure.DigitalSignature
         public Task VerifyBinary()
         {
             throw new System.NotImplementedException();
+        }
+
+        private Task<T> PostRequest<T>(object requestModel, string route)
+        {
+            var request = new RestRequest(route, DataFormat.Json);
+            request.AddJsonBody(requestModel);
+
+            // try
+            // {
+                return _restClient.PostAsync<T>(request);
+            // }
+            // catch (Exception e)
+            // {
+            //     throw new SignatureServiceException();
+            // }
         }
 
         public async Task<bool> IsHealthy()

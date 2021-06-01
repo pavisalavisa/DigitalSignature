@@ -1,4 +1,5 @@
 ﻿using Application.Certificates.Queries;
+using Application.Signature.Commands.SignPdf;
 using Application.Signature.Queries.GetSignatureServiceHealth;
 using Application.Users.Commands.AssignCertificate;
 using Application.Users.Commands.DeleteUser;
@@ -39,6 +40,7 @@ namespace Application
         private static void AddSignatureServices(IServiceCollection services)
         {
             services.AddScoped<IGetSignatureServiceHealth, GetSignatureServiceHealth>();
+            services.AddScoped<ISignPdfCommand, SignPdfCommand>();
         }
     }
 }

@@ -6,13 +6,10 @@ namespace Common.Extensions
 {
     public static class FluentValidationExtensions
     {
-        public static IRuleBuilderOptions<T, TP> WithCodedErrorMessage<T, TP>(this IRuleBuilderOptions<T, TP> builder, CodedError codedError) =>
+        public static IRuleBuilder<T, TP> WithCodedErrorMessage<T, TP>(this IRuleBuilderOptions<T, TP> builder, CodedError codedError) =>
             builder.WithErrorCode(codedError.ErrorCode).WithMessage(codedError.ErrorMessage);
 
-        public static IRuleBuilderOptions<T, string> IsB64String<T>(this IRuleBuilderOptions<T, string> builder)
-        {
-            return builder.Must(IsB64String);
-        }
+        public static IRuleBuilderOptions<T, string> IsB64String<T>(this IRuleBuilder<T, string> builder) => builder.Must(IsB64String);
 
         private static bool IsB64String(string input)
         {
