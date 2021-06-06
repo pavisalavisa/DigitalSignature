@@ -42,7 +42,7 @@ namespace Application.Verification.Commands.VerifyBinary
                 DocumentName = response.DocumentFilename,
                 SignaturesCount = response.SignaturesCount,
                 ValidSignaturesCount = response.ValidSignaturesCount,
-                Signatures = response.JaxbModel.SignatureOrTimestamp.Select(s => new VerifyBinaryResponseModel.Signature
+                Signatures = response.JaxbModel.SignatureOrTimestamp.Select(s => new VerifyBinaryResponseModel.VerifyBinarySignatureModel
                 {
                     Id = s.Id,
                     SignedBy = s.SignedBy,

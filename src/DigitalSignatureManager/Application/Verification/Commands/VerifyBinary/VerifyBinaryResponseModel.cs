@@ -8,9 +8,9 @@ namespace Application.Verification.Commands.VerifyBinary
         public int SignaturesCount { get; set; }
         public int ValidSignaturesCount { get; set; }
         public string DocumentName { get; set; }
-        public List<Signature> Signatures { get; set; }
+        public List<VerifyBinarySignatureModel> Signatures { get; set; }
 
-        public class Signature
+        public class VerifyBinarySignatureModel
         {
             public string Result { get; set; }
             public List<string> Errors { get; set; }

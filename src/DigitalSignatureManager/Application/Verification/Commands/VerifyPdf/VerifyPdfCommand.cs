@@ -40,7 +40,7 @@ namespace Application.Verification.Commands.VerifyPdf
                 DocumentName = response.DocumentFilename,
                 SignaturesCount = response.SignaturesCount,
                 ValidSignaturesCount = response.ValidSignaturesCount,
-                Signatures = response.JaxbModel.SignatureOrTimestamp.Select(s => new VerifyPdfResponseModel.Signature
+                Signatures = response.JaxbModel.SignatureOrTimestamp.Select(s => new VerifyPdfResponseModel.VerifyPdfSignatureModel
                 {
                     Id = s.Id,
                     SignedBy = s.SignedBy,

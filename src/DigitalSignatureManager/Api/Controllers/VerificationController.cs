@@ -17,7 +17,7 @@ namespace Api.Controllers
         [HttpPost]
         [Authorize("RegularUser")]
         [Route("Pdf")]
-        public async Task<IActionResult> VerifyPdf(VerifyPdfModel requestModel, [FromServices] IVerifyPdfCommand command)
+        public async Task<ActionResult<VerifyPdfResponseModel>> VerifyPdf(VerifyPdfModel requestModel, [FromServices] IVerifyPdfCommand command)
         {
             var response = await command.Execute(requestModel);
 
@@ -33,7 +33,7 @@ namespace Api.Controllers
         [HttpPost]
         [Authorize("RegularUser")]
         [Route("Binary")]
-        public async Task<IActionResult> VerifyBinary(VerifyBinaryModel requestModel, [FromServices] IVerifyBinaryCommand command)
+        public async Task<ActionResult<VerifyBinaryResponseModel>> VerifyBinary(VerifyBinaryModel requestModel, [FromServices] IVerifyBinaryCommand command)
         {
             var response = await command.Execute(requestModel);
 

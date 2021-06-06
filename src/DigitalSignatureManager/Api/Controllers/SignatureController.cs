@@ -32,7 +32,7 @@ namespace Api.Controllers
         [HttpPost]
         [Authorize("RegularUser")]
         [Route("Pdf")]
-        public async Task<IActionResult> SignPdf(SignPdfModel requestModel, [FromServices] ISignPdfCommand command)
+        public async Task<ActionResult<SignedPdfResponseModel>> SignPdf(SignPdfModel requestModel, [FromServices] ISignPdfCommand command)
         {
             var response = await command.Execute(requestModel);
 
@@ -48,7 +48,7 @@ namespace Api.Controllers
         [HttpPost]
         [Authorize("RegularUser")]
         [Route("Binary")]
-        public async Task<IActionResult> SignBinary(SignBinaryModel requestModel, [FromServices] ISignBinaryCommand command)
+        public async Task<ActionResult<SignedBinaryResponseModel>> SignBinary(SignBinaryModel requestModel, [FromServices] ISignBinaryCommand command)
         {
             var response = await command.Execute(requestModel);
 
