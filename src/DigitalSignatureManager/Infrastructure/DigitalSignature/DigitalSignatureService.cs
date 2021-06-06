@@ -28,15 +28,11 @@ namespace Infrastructure.DigitalSignature
             _restClient.BaseUrl = new Uri(digitalSignatureServiceBaseUri);
         }
 
-        public async Task<InternalSignatureResponseModel> SignPdf(InternalSignatureRequestModel requestModel)
-        {
-            return await PostRequest<InternalSignatureResponseModel>(requestModel, "pdf");
-        }
+        public async Task<InternalSignatureResponseModel> SignPdf(InternalSignatureRequestModel requestModel) =>
+            await PostRequest<InternalSignatureResponseModel>(requestModel, "pdf");
 
-        public async Task<InternalSignatureResponseModel> SignBinary(InternalSignatureRequestModel requestModel)
-        {
-            return await PostRequest<InternalSignatureResponseModel>(requestModel, "binary");
-        }
+        public async Task<InternalSignatureResponseModel> SignBinary(InternalSignatureRequestModel requestModel) =>
+            await PostRequest<InternalSignatureResponseModel>(requestModel, "binary");
 
         public Task VerifyPdf()
         {
@@ -55,7 +51,7 @@ namespace Infrastructure.DigitalSignature
 
             // try
             // {
-                return _restClient.PostAsync<T>(request);
+            return _restClient.PostAsync<T>(request);
             // }
             // catch (Exception e)
             // {

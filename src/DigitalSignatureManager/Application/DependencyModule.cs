@@ -1,4 +1,5 @@
 ﻿using Application.Certificates.Queries;
+using Application.Signature.Commands.SignBinary;
 using Application.Signature.Commands.SignPdf;
 using Application.Signature.Queries.GetSignatureServiceHealth;
 using Application.Users.Commands.AssignCertificate;
@@ -41,6 +42,7 @@ namespace Application
         {
             services.AddScoped<IGetSignatureServiceHealth, GetSignatureServiceHealth>();
             services.AddScoped<ISignPdfCommand, SignPdfCommand>();
+            services.AddScoped<ISignBinaryCommand, SignBinaryCommand>();
         }
     }
 }

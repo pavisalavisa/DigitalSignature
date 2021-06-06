@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Application.Signature.Commands.SignBinary;
 using Application.Signature.Commands.SignPdf;
 using Application.Signature.Queries.GetSignatureServiceHealth;
 using Microsoft.AspNetCore.Authorization;
@@ -32,6 +33,22 @@ namespace Api.Controllers
         [Authorize("RegularUser")]
         [Route("Pdf")]
         public async Task<IActionResult> SignPdf(SignPdfModel requestModel, [FromServices] ISignPdfCommand command)
+        {
+            var response = await command.Execute(requestModel);
+
+            return new OkObjectResult(response);
+        }
+
+        /// <summary>
+        /// Signs the provided b64 encoded binary file with certificate attached to current user
+        /// </summary>
+        /// <param name="requestModel"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize("RegularUser")]
+        [Route("Binary")]
+        public async Task<IActionResult> SignBinary(SignBinaryModel requestModel, [FromServices] ISignBinaryCommand command)
         {
             var response = await command.Execute(requestModel);
 
