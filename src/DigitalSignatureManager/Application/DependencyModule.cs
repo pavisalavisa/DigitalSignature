@@ -8,6 +8,8 @@ using Application.Users.Commands.RegisterUser;
 using Application.Users.Commands.UpdateUser;
 using Application.Users.Queries.GetAllUsers;
 using Application.Users.Queries.GetUserById;
+using Application.Verification.Commands.VerifyBinary;
+using Application.Verification.Commands.VerifyPdf;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application
@@ -43,6 +45,8 @@ namespace Application
             services.AddScoped<IGetSignatureServiceHealth, GetSignatureServiceHealth>();
             services.AddScoped<ISignPdfCommand, SignPdfCommand>();
             services.AddScoped<ISignBinaryCommand, SignBinaryCommand>();
+            services.AddScoped<IVerifyPdfCommand, VerifyPdfCommand>();
+            services.AddScoped<IVerifyBinaryCommand, VerifyBinaryCommand>();
         }
     }
 }

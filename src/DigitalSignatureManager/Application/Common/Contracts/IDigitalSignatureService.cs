@@ -7,8 +7,8 @@ namespace Application.Common.Contracts
     {
         Task<InternalSignatureResponseModel> SignPdf(InternalSignatureRequestModel requestModel);
         Task<InternalSignatureResponseModel> SignBinary(InternalSignatureRequestModel requestModel);
-        Task VerifyPdf();
-        Task VerifyBinary();
+        Task<InternalVerificationResponseModel> VerifyPdf(BaseFileRequestModel requestModel);
+        Task<InternalVerificationResponseModel> VerifyBinary(InternalDetachedSignatureRequestModel requestModel);
         Task<bool> IsHealthy();
     }
 }

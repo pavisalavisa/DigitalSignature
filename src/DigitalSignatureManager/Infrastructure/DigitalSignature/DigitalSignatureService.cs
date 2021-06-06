@@ -29,20 +29,16 @@ namespace Infrastructure.DigitalSignature
         }
 
         public async Task<InternalSignatureResponseModel> SignPdf(InternalSignatureRequestModel requestModel) =>
-            await PostRequest<InternalSignatureResponseModel>(requestModel, "pdf");
+            await PostRequest<InternalSignatureResponseModel>(requestModel, "signature/pdf");
 
         public async Task<InternalSignatureResponseModel> SignBinary(InternalSignatureRequestModel requestModel) =>
-            await PostRequest<InternalSignatureResponseModel>(requestModel, "binary");
+            await PostRequest<InternalSignatureResponseModel>(requestModel, "signature/binary");
 
-        public Task VerifyPdf()
-        {
-            throw new System.NotImplementedException();
-        }
+        public async Task<InternalVerificationResponseModel> VerifyPdf(BaseFileRequestModel requestModel) =>
+            await PostRequest<InternalVerificationResponseModel>(requestModel, "verification/pdf");
 
-        public Task VerifyBinary()
-        {
-            throw new System.NotImplementedException();
-        }
+        public async Task<InternalVerificationResponseModel> VerifyBinary(InternalDetachedSignatureRequestModel requestModel) =>
+            await PostRequest<InternalVerificationResponseModel>(requestModel, "verification/binary");
 
         private Task<T> PostRequest<T>(object requestModel, string route)
         {
