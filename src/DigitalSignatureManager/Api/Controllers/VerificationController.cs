@@ -15,7 +15,7 @@ namespace Api.Controllers
         /// <param name="command"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize("RegularUser")]
+        [Authorize(Roles = "RegularUser")]
         [Route("Pdf")]
         public async Task<ActionResult<VerifyPdfResponseModel>> VerifyPdf(VerifyPdfModel requestModel, [FromServices] IVerifyPdfCommand command)
         {
@@ -31,7 +31,7 @@ namespace Api.Controllers
         /// <param name="command"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize("RegularUser")]
+        [Authorize(Roles = "RegularUser")]
         [Route("Binary")]
         public async Task<ActionResult<VerifyBinaryResponseModel>> VerifyBinary(VerifyBinaryModel requestModel, [FromServices] IVerifyBinaryCommand command)
         {

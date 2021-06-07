@@ -30,7 +30,7 @@ namespace Api.Controllers
         /// <param name="command"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize("RegularUser")]
+        [Authorize(Roles = "RegularUser")]
         [Route("Pdf")]
         public async Task<ActionResult<SignedPdfResponseModel>> SignPdf(SignPdfModel requestModel, [FromServices] ISignPdfCommand command)
         {
@@ -46,7 +46,7 @@ namespace Api.Controllers
         /// <param name="command"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize("RegularUser")]
+        [Authorize(Roles = "RegularUser")]
         [Route("Binary")]
         public async Task<ActionResult<SignedBinaryResponseModel>> SignBinary(SignBinaryModel requestModel, [FromServices] ISignBinaryCommand command)
         {
