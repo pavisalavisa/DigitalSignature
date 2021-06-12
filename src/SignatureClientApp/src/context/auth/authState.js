@@ -54,7 +54,6 @@ const AuthState = (props) => {
       console.log(`Token is ${localStorage.getItem("token")}`);
       //loadUser(); TODO: Antonio - think about this
     } catch (err) {
-
       dispatch({
         type: "LOGIN_FAIL",
         payload: err.response.data,
@@ -62,6 +61,14 @@ const AuthState = (props) => {
 
       localStorage.removeItem("token");
     }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+
+    dispatch({
+      type: "LOGOUT",
+    });
   };
 
   const { children } = props;
@@ -76,8 +83,9 @@ const AuthState = (props) => {
       error,
       loadUser,
       login,
+      logout,
     }),
-    [loginToken, isAuthenticated, loading, user, error, loadUser, login]
+    [loginToken, isAuthenticated, loading, user, error, loadUser, login, logout]
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
