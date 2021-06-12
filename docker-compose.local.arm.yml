@@ -1,0 +1,44 @@
+version: '3.4'
+
+services:
+  manager-api:
+    image: ${DOCKER_REGISTRY-}digital-signature-manager-api
+    build:
+      context: src/DigitalSignatureManager
+      dockerfile: Api/Dockerfile
+    environment:
+    # Nice conversation starter :)
+    # These values are secrets and should not be handled like this
+      - "ConnectionStrings__DefaultConnection=Server=db;Database=DigitalSignatureDb;User=sa;Password=MyPassword123;MultipleActiveResultSets=true"
+      - "ASPNETCORE_Kestrel__Certificates__Default__Password=Admin123!"
+      - "ASPNETCORE_Kestrel__Certificates__Default__Path=/https/digitalSignatureManager.pfx"
+      - "ASPNETCORE_ENVIRONMENT=Development"
+    volumes:
+      - ~/.aspnet/https:/https:ro
+    ports:
+      - "4200:4200"
+      - "4201:4201"
+    depends_on:
+      - db
+      - signer-api
+    restart: on-failure
+    
+  signer-api:
+    image: ${DOCKER_REGISTRY-}digital-signature-signer-api
+    build:
+      context: src/DigitalSignatureSigner
+      dockerfile: Dockerfile
+    restart: on-failure
+# Nice conversation starter :)
+# How to handle DB in the containerized world
+  db:
+    image: "mcr.microsoft.com/azure-sql-edge:latest"
+    volumes:
+      - events_mssql:/var/opt/mssql  
+    ports:
+      - 1433:1433
+    environment:
+      - "SA_PASSWORD=MyPassword123"
+      - "ACCEPT_EULA=1"
+volumes:
+    events_mssql:
