@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import PdfViewer from "./Pdf-viewer";
 import "./pdf.css";
 import { saveAs } from "file-saver";
-import { signPdf } from "../services/signatureService";
-import { verifyPdf } from "../services/verificationService";
+import { signPdf } from "../../services/signatureService";
+import { verifyPdf } from "../../services/verificationService";
 
 function Pdf(props) {
   const [selectedFile, setSelectedFile] = useState();

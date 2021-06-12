@@ -1,5 +1,4 @@
 import axios from "axios";
-import { b64Certificate, certificatePassword } from "../constants";
 import { fileToBase64 } from "../common/encodingHelpers";
 
 const API_URL = "http://localhost:8080/api/v1/signature/";
@@ -18,10 +17,6 @@ const sign = async (file, includeTimestamp, route, responseType) => {
   const requestModel = {
     fileName: file.name,
     includeTimestamp: includeTimestamp,
-    certificate: {
-      b64Certificate,
-      certificatePassword,
-    },
     b64Bytes: b64Data,
   };
 
