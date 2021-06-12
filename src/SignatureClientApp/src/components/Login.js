@@ -66,8 +66,7 @@ export default (props) => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
+    <>
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -138,6 +137,6 @@ export default (props) => {
           <CircularProgress />
         </Fade>
       </Grid>
-    </Container>
+    </>
   );
 };
