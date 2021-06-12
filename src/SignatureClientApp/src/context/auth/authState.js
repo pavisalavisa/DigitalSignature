@@ -1,0 +1,85 @@
+import React, { useReducer, useCallback, useMemo } from "react";
+import axios from "axios";
+import AuthContext from "./authContext";
+import authReducer from "./authReducer";
+import AuthenticationService from "../../services/authenticationService";
+
+const DefaultAuthorizationHeader = "Authorization";
+
+function getAuthToken(token) {
+  if (token) {
+    axios.defaults.headers.common[DefaultAuthorizationHeader] = token;
+  } else {
+    delete axios.defaults.headers.common[DefaultAuthorizationHeader];
+  }
+}
+
+const AuthState = (props) => {
+  const token = localStorage.getItem("token");
+  const initialState = {
+    token,
+    isAuthenticated: Boolean(token) || null,
+    loading: true,
+    user: null,
+    error: null,
+  };
+
+  const [state, dispatch] = useReducer(authReducer, initialState);
+
+  const loadUser = async () => {
+    getAuthToken(localStorage.token);
+    try {
+      const res = await axios.post("/api/auth/");
+      dispatch({
+        type: "USER_LOADED",
+        payload: res.data,
+      });
+    } catch (err) {
+      dispatch({ type: "AUTH_ERROR" });
+    }
+  };
+
+  const login = async (data) => {
+    try {
+      const res = await AuthenticationService.login(data);
+
+      console.log(res);
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: res.data,
+      });
+
+      localStorage.setItem("token", token);
+
+      console.log(`Token is ${localStorage.getItem("token")}`);
+      //loadUser(); TODO: Antonio - think about this
+    } catch (err) {
+
+      dispatch({
+        type: "LOGIN_FAIL",
+        payload: err.response.data,
+      });
+
+      localStorage.removeItem("token");
+    }
+  };
+
+  const { children } = props;
+
+  const { token: loginToken, isAuthenticated, loading, user, error } = state;
+  const value = useMemo(
+    () => ({
+      token: loginToken,
+      isAuthenticated,
+      loading,
+      user,
+      error,
+      loadUser,
+      login,
+    }),
+    [loginToken, isAuthenticated, loading, user, error, loadUser, login]
+  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+export default AuthState;
