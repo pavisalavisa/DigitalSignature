@@ -1,7 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
-import AuthContext from '../context/auth/authContext';
+import React, { useState, useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
+import AuthContext from "../context/auth/authContext";
 
-const Login = props => {
+const Login = (props) => {
   const { history } = props;
   const authContext = useContext(AuthContext);
 
@@ -9,28 +10,28 @@ const Login = props => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      history.push('/');
+      history.push("/");
     }
 
-    if (error === 'Invalid Credentials') {
+    if (error === "Invalid Credentials") {
       clearErrors();
     }
   }, [error, isAuthenticated, history]);
 
   const [user, setUser] = useState({
-    username: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
-  const { username, password } = user;
+  const { email, password } = user;
 
-  const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
+  const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-        
+
     await login({
-      username,
+      email,
       password,
     });
   };
@@ -42,12 +43,12 @@ const Login = props => {
       </h1>
       <form onSubmit={onSubmit}>
         <div>
-          <label htmlFor="user">Username</label>
+          <label htmlFor="user">Email</label>
           <input
-            id="username"
+            id="email"
             type="text"
-            name="username"
-            value={username}
+            name="email"
+            value={email}
             onChange={onChange}
             required
           />
@@ -65,6 +66,10 @@ const Login = props => {
         </div>
         <input type="submit" value="Login" />
       </form>
+      <div>
+        <p>Don't have an account?</p>
+        <Link to="/registration">Register now</Link>
+      </div>
     </div>
   );
 };

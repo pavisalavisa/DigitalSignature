@@ -2,22 +2,21 @@ import axios from "axios";
 
 const API_URL = "https://localhost:4201/api/";
 
-const register = (username, email, password) => {
-  return axios.post(API_URL + "Users/Registration", {
-    username,
+const register = async ({ email, password }) => {
+  return await axios.post(API_URL + "Users/Registration", {
     email,
     password,
   });
 };
 
-const login = async ({username, password}) => {
+const login = async ({ email, password }) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
 
-  return await axios.post(`${API_URL}Token`, { username, password }, config);
+  return await axios.post(`${API_URL}Token`, { email, password }, config);
 };
 
 const logout = () => {
