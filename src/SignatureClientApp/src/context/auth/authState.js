@@ -19,7 +19,7 @@ const AuthState = (props) => {
   const initialState = {
     token,
     isAuthenticated: Boolean(token) || null,
-    loading: true,
+    loading: false,
     user: null,
     error: null,
   };
@@ -49,7 +49,7 @@ const AuthState = (props) => {
         payload: res.data,
       });
 
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", res.data.jwt);
 
       console.log(`Token is ${localStorage.getItem("token")}`);
       //loadUser(); TODO: Antonio - think about this
