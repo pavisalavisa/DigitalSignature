@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback, useMemo } from "react";
+import React, { useReducer, useEffect, useMemo } from "react";
 import axios from "axios";
 import AuthContext from "./authContext";
 import authReducer from "./authReducer";
@@ -25,6 +25,8 @@ const AuthState = (props) => {
     user: null,
     error: null,
   };
+
+  useEffect(() => setAuthenticationHeader(token), []);
 
   const [state, dispatch] = useReducer(authReducer, initialState);
 
