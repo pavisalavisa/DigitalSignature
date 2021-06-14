@@ -1,10 +1,10 @@
 import axios from "axios";
 import { fileToBase64 } from "../common/encodingHelpers";
 
-const API_URL = "http://localhost:8080/api/v1/signature/";
+const API_URL = "https://localhost:4201/api/Signature/";
 
 export const signPdf = async (file, includeTimestamp = false) => {
-  return await sign(file, includeTimestamp, "pdf/download", "blob");
+  return await sign(file, includeTimestamp, "pdf", "json");
 };
 
 export const signBinary = async (file, includeTimestamp = false) => {

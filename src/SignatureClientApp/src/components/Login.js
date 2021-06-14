@@ -11,6 +11,7 @@ import { Link as RouterLink } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Fade from "@material-ui/core/Fade";
 import AuthContext from "../context/auth/authContext";
+import { Container } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -64,7 +65,7 @@ export default (props) => {
   };
 
   return (
-    <>
+    <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -135,6 +136,6 @@ export default (props) => {
           <CircularProgress />
         </Fade>
       </Grid>
-    </>
+    </Container>
   );
 };

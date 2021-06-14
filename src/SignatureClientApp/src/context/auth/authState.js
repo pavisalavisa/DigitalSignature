@@ -6,9 +6,11 @@ import AuthenticationService from "../../services/authenticationService";
 
 const DefaultAuthorizationHeader = "Authorization";
 
-function getAuthToken(token) {
+function setAuthenticationHeader(token) {
   if (token) {
-    axios.defaults.headers.common[DefaultAuthorizationHeader] = token;
+    axios.defaults.headers.common[
+      DefaultAuthorizationHeader
+    ] = `Bearer ${token}`;
   } else {
     delete axios.defaults.headers.common[DefaultAuthorizationHeader];
   }
@@ -27,12 +29,13 @@ const AuthState = (props) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   const loadUser = async () => {
-    getAuthToken(localStorage.token);
+    setAuthenticationHeader(localStorage.token);
+    console.log("Loading user...");
     try {
-      const res = await axios.post("/api/auth/");
+      //const res = await axios.post("/api/auth/");
       dispatch({
         type: "USER_LOADED",
-        payload: res.data,
+        // payload: res.data,
       });
     } catch (err) {
       dispatch({ type: "AUTH_ERROR" });
@@ -52,7 +55,7 @@ const AuthState = (props) => {
       localStorage.setItem("token", res.data.jwt);
 
       console.log(`Token is ${localStorage.getItem("token")}`);
-      //loadUser(); TODO: Antonio - think about this
+      loadUser(); //TODO: Antonio - think about this
     } catch (err) {
       dispatch({
         type: "LOGIN_FAIL",

@@ -8,7 +8,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Home from "./components/Home";
 import Registration from "./components/Registration";
 import Navbar from "./components/Navbar";
-import Pdf from "./components/Pdf/Pdf";
+import Pdf from "./components/Pdf";
 import "./styles.css";
 
 function App() {
@@ -16,15 +16,13 @@ function App() {
     <AuthState>
       <Router>
         <Navbar />
+        <CssBaseline />
         <Switch>
-          <Container component="main" maxWidth="sm">
-            <CssBaseline />
             <Route exact path="/login" component={Login} />
             <Route exact path="/registration" component={Registration} />
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/pdf" component={Pdf} />
             {/* <PrivateRoute exact path="/binary" component={Binary} /> */}
-          </Container>
         </Switch>
       </Router>
     </AuthState>
