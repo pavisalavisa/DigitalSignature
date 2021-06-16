@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import PdfViewer from "./Pdf/Pdf-viewer";
-import PdfSelector from "./Pdf/PdfSelector";
+import PdfViewer from "./PdfViewer";
+import PdfSelector from "./PdfSelector";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Paper,
@@ -10,6 +10,7 @@ import {
   Backdrop,
   CircularProgress,
 } from "@material-ui/core";
+import VerificationTable from "../VerificationTable";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -67,9 +68,11 @@ function Pdf(props) {
                 isLoadingSubmit={isLoadingSubmit}
               />
             </Grid>
-            <Grid item xs={12}>
-              Result goes here...
-            </Grid>
+            {!!verificationResult ? (
+              <Grid item xs={12}>
+                <VerificationTable verificationResult={verificationResult} />
+              </Grid>
+            ) : null}
           </Grid>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6} justify="center">
@@ -86,23 +89,6 @@ function Pdf(props) {
             </Grid>
           </Paper>
         </Grid>
-        {/* <Grid item justify="center">
-          <Grid item xs={12}>
-            <Typography align="center" component="h2" variant="h5">
-              Verification result
-            </Typography>
-          </Grid>
-          {!!verificationResult ? (
-            <Grid item>
-              <Typography component="p">
-                Signatures count: {verificationResult.signaturesCount}
-              </Typography>
-              {verificationResult.signatures.map((s, i) => (
-                <p key={i}>Signed by: {s.signedBy}</p>
-              ))}
-            </Grid>
-          ) : null}
-        </Grid> */}
       </Grid>
     </Container>
   );
