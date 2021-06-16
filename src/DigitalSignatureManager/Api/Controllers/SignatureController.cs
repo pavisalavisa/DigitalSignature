@@ -1,9 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Application.Signature.Commands.DownloadSignedPdf;
 using Application.Signature.Commands.SignBinary;
 using Application.Signature.Commands.SignPdf;
 using Application.Signature.Queries.GetSignatureServiceHealth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 
 namespace Api.Controllers
 {
@@ -37,6 +40,22 @@ namespace Api.Controllers
             var response = await command.Execute(requestModel);
 
             return new OkObjectResult(response);
+        }
+
+        /// <summary>
+        /// Signs the provided b64 encoded pdf file with certificate attached to current user
+        /// </summary>
+        /// <param name="requestModel"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize(Roles = "RegularUser")]
+        [Route("Pdf/Download")]
+        public async Task<ActionResult<SignedPdfResponseModel>> DownloadSignedPdf(SignPdfModel requestModel, [FromServices] IDownloadSignedPdfCommand command)
+        {
+            var response = await command.Execute(requestModel);
+
+            return new FileStreamResult(response, "application/pdf");
         }
 
         /// <summary>

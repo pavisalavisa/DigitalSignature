@@ -4,11 +4,11 @@ import { fileToBase64 } from "../common/encodingHelpers";
 const API_URL = "https://localhost:4201/api/Signature/";
 
 export const signPdf = async (file, includeTimestamp = false) => {
-  return await sign(file, includeTimestamp, "pdf", "json");
+  return await sign(file, includeTimestamp, "Pdf/Download", "blob");
 };
 
 export const signBinary = async (file, includeTimestamp = false) => {
-  return await sign(file, includeTimestamp, "binary", "json");
+  return await sign(file, includeTimestamp, "Binary", "json");
 };
 
 const sign = async (file, includeTimestamp, route, responseType) => {
