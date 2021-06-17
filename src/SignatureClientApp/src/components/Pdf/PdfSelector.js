@@ -5,6 +5,7 @@ import { verifyPdf } from "../../services/verificationService";
 import { Button, Input, Typography, Grid } from "@material-ui/core";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
+import { withSnackbar } from "../Snackbar";
 
 function PdfSelector(props) {
   const {
@@ -13,14 +14,11 @@ function PdfSelector(props) {
     setSelectedFile,
     selectedFile,
     isLoadingSubmit,
+    snackbarShowMessage
   } = props;
-
-  console.log(props);
 
   const changeHandler = (e) => {
     e.preventDefault();
-
-    console.log(setSelectedFile);
 
     setSelectedFile(e.target.files[0]);
   };
@@ -32,6 +30,7 @@ function PdfSelector(props) {
       const verificationResponse = await verifyPdf(selectedFile);
 
       setVerificationResult(verificationResponse);
+      snackbarShowMessage("Successfully verified the PDF");
     } finally {
       setIsLoadingSubmit(false);
     }
@@ -46,6 +45,8 @@ function PdfSelector(props) {
       const signedFile = await signPdf(selectedFile);
 
       saveAs(signedFile, `signed_${selectedFile.name}`);
+      
+      snackbarShowMessage("Signed file is downloaded.");
     } finally {
       setIsLoadingSubmit(false);
     }
@@ -99,4 +100,4 @@ function PdfSelector(props) {
   );
 }
 
-export default PdfSelector;
+export default withSnackbar(PdfSelector);

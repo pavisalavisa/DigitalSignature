@@ -45,6 +45,11 @@ function Pdf(props) {
   const [pdf, setPdf] = useState();
   const [verificationResult, setVerificationResult] = useState();
   const classes = useStyles();
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: null,
+    severity: "success",
+  });
 
   // Preview PDF
   useEffect(() => {
@@ -68,11 +73,9 @@ function Pdf(props) {
                 isLoadingSubmit={isLoadingSubmit}
               />
             </Grid>
-            {!!verificationResult ? (
-              <Grid item xs={12}>
-                <VerificationTable verificationResult={verificationResult} />
-              </Grid>
-            ) : null}
+            <Grid item xs={12}>
+              <VerificationTable verificationResult={verificationResult} />
+            </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6} justify="center">
