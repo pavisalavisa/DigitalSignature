@@ -66,7 +66,7 @@ namespace Application.Users.Commands.AssignCertificate
             var newCertificate = CreateCertificate(model, previousCertificate.OwnerId);
 
             previousCertificate.B64Certificate = newCertificate.B64Certificate;
-            previousCertificate.B64Password = newCertificate.B64Certificate;
+            previousCertificate.B64Password = newCertificate.B64Password;
         }
 
         private Certificate CreateCertificate(CertificateAssignmentModel model, int userId) =>
