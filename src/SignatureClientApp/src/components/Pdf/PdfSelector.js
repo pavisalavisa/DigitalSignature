@@ -2,7 +2,7 @@ import React from "react";
 import { saveAs } from "file-saver";
 import { signPdf } from "../../services/signatureService";
 import { verifyPdf } from "../../services/verificationService";
-import { Button, Input, Typography, Grid } from "@material-ui/core";
+import { Button, Input, Typography, Grid, Divider } from "@material-ui/core";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import { withSnackbar } from "../Snackbar";
@@ -55,7 +55,7 @@ function PdfSelector(props) {
   return (
     <Grid container justify="space-around" spacing={2}>
       <Grid item xs={12} md={12} lg={12} xl={12}>
-        <Typography align="center" component="h2" variant="h5">
+        <Typography align="center" component="h2" variant="h4">
           Select a file you would like to sign
         </Typography>
       </Grid>

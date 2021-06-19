@@ -1,16 +1,21 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useContext } from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import AuthContext from '../context/auth/authContext';
+import React, { useContext } from "react";
+import { Route, Redirect } from "react-router-dom";
+import AuthContext from "../context/auth/authContext";
+import AppNavigation from "./AppNavigation";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const authContext = useContext(AuthContext);
   const { isAuthenticated } = authContext;
   return (
-    <Route
-      {...rest}
-      render={props => (isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />)}
-    />
+    <AppNavigation>
+      <Route
+        {...rest}
+        render={(props) =>
+          isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
+        }
+      />
+    </AppNavigation>
   );
 };
 

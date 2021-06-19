@@ -14,13 +14,13 @@ import VerificationTable from "../VerificationTable";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    // marginTop: theme.spacing(8),
     alignItems: "center",
     justifyItems: "center",
   },
   pdfPreviewContainer: {
-    marginTop: theme.spacing(3),
-    height: "60vh",
+    // marginTop: theme.spacing(3),
+    height: "90vh",
     overflow: "scroll",
   },
   form: {
@@ -45,11 +45,6 @@ function Pdf(props) {
   const [pdf, setPdf] = useState();
   const [verificationResult, setVerificationResult] = useState();
   const classes = useStyles();
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: null,
-    severity: "success",
-  });
 
   // Preview PDF
   useEffect(() => {
@@ -57,43 +52,38 @@ function Pdf(props) {
   }, [selectedFile]);
 
   return (
-    <Container component="main" maxWidth="xl" className={classes.paper}>
+    <Grid container direction="row" justify="space-between">
       <Backdrop className={classes.backdrop} open={isLoadingSubmit}>
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Grid container spacing={4} justify="space-between">
-        <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
-          <Grid container direction="column" spacing={4}>
-            <Grid item xs={12}>
-              <PdfSelector
-                setIsLoadingSubmit={setIsLoadingSubmit}
-                setVerificationResult={setVerificationResult}
-                setSelectedFile={setSelectedFile}
-                selectedFile={selectedFile}
-                isLoadingSubmit={isLoadingSubmit}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <VerificationTable verificationResult={verificationResult} />
-            </Grid>
+      <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
+        <Grid container direction="column" spacing={4}>
+          <Grid item xs={12}>
+            <PdfSelector
+              setIsLoadingSubmit={setIsLoadingSubmit}
+              setVerificationResult={setVerificationResult}
+              setSelectedFile={setSelectedFile}
+              selectedFile={selectedFile}
+              isLoadingSubmit={isLoadingSubmit}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <VerificationTable verificationResult={verificationResult} />
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={6} justify="center">
-          <Typography align="center" component="h2" variant="h5">
-            Preview
-          </Typography>
-          <Paper>
-            <Grid
-              container
-              justify="center"
-              className={classes.pdfPreviewContainer}
-            >
-              <PdfViewer pdf={pdf} />
-            </Grid>
-          </Paper>
-        </Grid>
       </Grid>
-    </Container>
+      <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+        <Paper>
+          <Grid
+            container
+            justify="center"
+            className={classes.pdfPreviewContainer}
+          >
+            <PdfViewer pdf={pdf} />
+          </Grid>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 }
 export default Pdf;

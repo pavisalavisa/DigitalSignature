@@ -8,6 +8,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import red from '@material-ui/core/colors/red';
+import { Divider, Typography } from "@material-ui/core";
+
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -35,11 +37,14 @@ const useStyles = makeStyles({
 
 function VerificationTable({ verificationResult }) {
   const classes = useStyles();
-
-  console.log(verificationResult);
   
   return (
-    <TableContainer component={Paper}>
+    <>
+    <Divider />
+    <Typography variant="h5" component="h3">
+      This file has no signatures.
+    </Typography>
+    <TableContainer >
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
@@ -51,7 +56,7 @@ function VerificationTable({ verificationResult }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {verificationResult.signatures.map((sig) => (
+          {verificationResult && verificationResult.signatures.map((sig) => (
             <StyledTableRow key={sig.id}>
               <StyledTableCell component="th" scope="row">
                 {sig.id.substring(0,8)}
@@ -65,6 +70,7 @@ function VerificationTable({ verificationResult }) {
         </TableBody>
       </Table>
     </TableContainer>
+    </>
   );
 }
 
