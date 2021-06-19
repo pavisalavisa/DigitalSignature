@@ -4,23 +4,16 @@ import PdfSelector from "./PdfSelector";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Paper,
-  Typography,
   Grid,
-  Container,
   Backdrop,
   CircularProgress,
 } from "@material-ui/core";
 import VerificationTable from "../VerificationTable";
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    // marginTop: theme.spacing(8),
-    alignItems: "center",
-    justifyItems: "center",
-  },
   pdfPreviewContainer: {
     // marginTop: theme.spacing(3),
-    height: "90vh",
+    height: "93.5vh",
     overflow: "scroll",
   },
   form: {
@@ -37,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     color: "#fff",
   },
+  actionGrid:{
+    padding: theme.spacing(4,0,0,4)
+  }
 }));
 
 function Pdf(props) {
@@ -56,7 +52,7 @@ function Pdf(props) {
       <Backdrop className={classes.backdrop} open={isLoadingSubmit}>
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
+      <Grid item xs={12} sm={12} md={5} lg={5} xl={5} className={classes.actionGrid}>
         <Grid container direction="column" spacing={4}>
           <Grid item xs={12}>
             <PdfSelector

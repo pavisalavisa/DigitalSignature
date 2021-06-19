@@ -1,25 +1,46 @@
 import React, { useState } from "react";
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
-import { Typography, CircularProgress, Box, makeStyles } from "@material-ui/core";
+import {
+  Typography,
+  CircularProgress,
+  Box,
+  makeStyles,
+} from "@material-ui/core";
 
-const useStyles = makeStyles((theme)=>({
-  noData: {
-    height:"50vh",
-    display:"flex",
+const useStyles = makeStyles((theme) => ({
+  previewBox: {
+    height: "75vh",
+    display: "flex",
   },
-  noDataText:{
+  previewBoxItem: {
     alignSelf: "center",
-  }
+  },
 }));
 
 function NoData() {
-  const {noData, noDataText} = useStyles();
+  const { previewBox, previewBoxItem } = useStyles();
 
   return (
-    <Box className={noData}>
-      <Typography color="textSecondary" align="center" component="span" className={noDataText}>
-        PDF not selected{" "}
+    <Box className={previewBox}>
+      <Typography
+        color="textSecondary"
+        align="center"
+        component="span"
+        variant="h4"
+        className={previewBoxItem}
+      >
+        PDF not selected
       </Typography>
+    </Box>
+  );
+}
+
+function UploadProgress() {
+  const { previewBox, previewBoxItem } = useStyles();
+
+  return (
+    <Box className={previewBox}>
+      <CircularProgress className={previewBoxItem} />
     </Box>
   );
 }
@@ -37,7 +58,7 @@ export default function PdfViewer(props) {
     <Document
       file={pdf}
       onLoadSuccess={onDocumentLoadSuccess}
-      loading={<CircularProgress />}
+      loading={<UploadProgress />}
       noData={<NoData />}
     >
       {Array.from(new Array(numPages), (_, index) => (

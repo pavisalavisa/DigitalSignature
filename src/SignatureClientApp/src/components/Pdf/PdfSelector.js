@@ -53,7 +53,7 @@ function PdfSelector(props) {
   };
 
   return (
-    <Grid container justify="space-around" spacing={2}>
+    <Grid container justify="space-around" spacing={10}>
       <Grid item xs={12} md={12} lg={12} xl={12}>
         <Typography align="center" component="h2" variant="h4">
           Select a file you would like to sign
