@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -7,13 +7,13 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import FolderIcon from "@material-ui/icons/Folder";
 import HistoryIcon from "@material-ui/icons/History";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { withRouter } from "react-router";
+import AuthContext from "../context/auth/authContext";
 
 const drawerWidth = 240;
 
@@ -30,8 +30,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function () {
+const primaryDrawerItems = [
+  {
+    text: "PDF",
+    DrawerIcon: PictureAsPdfIcon,
+    onClick: (history) => {
+      history.push("/pdf");
+    },
+  },
+  {
+    text: "Other Files",
+    DrawerIcon: FolderIcon,
+    onClick: (history) => {
+      history.push("/binary");
+    },
+  },
+  {
+    text: "History",
+    DrawerIcon: HistoryIcon,
+    onClick: (history) => {
+      history.push("/");
+    },
+  },
+];
+
+function AppDrawer({ history }) {
   const classes = useStyles();
+  const { logout } = useContext(AuthContext);
 
   return (
     <Drawer
@@ -44,34 +69,24 @@ export default function () {
       <Toolbar />
       <div className={classes.drawerContainer}>
         <List>
-          <ListItem button>
-            <ListItemIcon>
-              <PictureAsPdfIcon />
-            </ListItemIcon>
-            <ListItemText primary="PDF" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <FolderIcon />
-            </ListItemIcon>
-            <ListItemText primary="Other files" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <HistoryIcon />
-            </ListItemIcon>
-            <ListItemText primary="History" />
-          </ListItem>
+          {primaryDrawerItems.map(({ text, DrawerIcon, onClick }) => (
+            <ListItem button key={text} onClick={() => onClick(history)}>
+              <ListItemIcon>
+                <DrawerIcon />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
         </List>
         <Divider />
         <List>
-          <ListItem button>
+          <ListItem button onClick={() => history.push("/account")}>
             <ListItemIcon>
               <AccountBoxIcon />
             </ListItemIcon>
             <ListItemText primary="My account" />
           </ListItem>
-          <ListItem button>
+          <ListItem button onClick={() => logout()}>
             <ListItemIcon>
               <ExitToAppIcon />
             </ListItemIcon>
@@ -82,3 +97,5 @@ export default function () {
     </Drawer>
   );
 }
+
+export default withRouter(AppDrawer);
