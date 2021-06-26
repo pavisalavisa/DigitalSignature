@@ -7,6 +7,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Home from "./components/Home";
 import Registration from "./components/Registration";
 import Pdf from "./components/Pdf";
+import History from "./components/History";
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
             <Route exact path="/registration" component={Registration} />
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/pdf" component={Pdf} />
+            <PrivateRoute exact path="/history" component={History} />
+
             {/* <PrivateRoute exact path="/binary" component={Binary} /> */}
           </Switch>
       </Router>

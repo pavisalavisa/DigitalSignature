@@ -49,7 +49,7 @@ const primaryDrawerItems = [
     text: "History",
     DrawerIcon: HistoryIcon,
     onClick: (history) => {
-      history.push("/");
+      history.push("/history");
     },
   },
 ];
