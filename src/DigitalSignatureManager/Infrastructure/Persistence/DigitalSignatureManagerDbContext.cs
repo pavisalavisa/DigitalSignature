@@ -18,6 +18,7 @@ namespace Infrastructure.Persistence
         {
         }
 
+        public DbSet<Event> Events { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
         public DbSet<T> EntitySet<T>() where T : class, IEntity => Set<T>();
 

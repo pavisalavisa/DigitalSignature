@@ -8,8 +8,6 @@ namespace Infrastructure.Persistence.Configurations
     {
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {
-            builder.ToTable("Certificates");
-
             builder.Property(x => x.Created).IsRequired();
             builder.Property(x => x.Updated).IsRequired(false);
         }

@@ -9,6 +9,7 @@ namespace Application.Common.Contracts
 {
     public interface IDigitalSignatureManagerDbContext
     {
+        DbSet<Event> Events { get; }
         DbSet<Certificate> Certificates { get; }
 
         DbSet<T> EntitySet<T>() where T : class, IEntity;
