@@ -1,4 +1,5 @@
 ﻿using Application.Certificates.Queries;
+using Application.Events.Queries.GetEventDetails;
 using Application.Events.Queries.GetPersonalEvents;
 using Application.Signature.Commands.DownloadSignedPdf;
 using Application.Signature.Commands.SignBinary;
@@ -56,6 +57,7 @@ namespace Application
         private static void AddEventServices(IServiceCollection services)
         {
             services.AddScoped<IGetPersonalEventsQuery, GetPersonalEventsQuery>();
+            services.AddScoped<IGetEventDetailsQuery, GetEventDetailsQuery>();
         }
     }
 }

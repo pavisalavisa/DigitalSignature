@@ -32,13 +32,12 @@ namespace Application.Events.Queries.GetPersonalEvents
         protected override Expression<Func<Event, PersonalEventModel>> GetMappingExpression() =>
             x => new PersonalEventModel
             {
+                Id = x.Id,
                 Created = x.Created,
                 Error = x.Error,
                 Type = x.Type,
                 IsSuccessful = x.IsSuccessful,
-                InputDocumentB64 = x.InputDocumentB64,
                 InputDocumentName = x.InputDocumentName,
-                OutputDocumentB64 = x.OutputDocumentB64
             };
     }
 }
