@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Application.Certificates.Queries;
 using Application.Common.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -20,6 +20,7 @@ namespace Api.Controllers
         ///
         /// </remarks>
         /// <param name="filterModel">Filter and pagination options</param>
+        /// <param name="query"></param>
         /// <returns>Returns paginated list of certificates</returns>
         /// <response code ="200">Certificates were successfully fetched.</response>
         /// <response code ="400">Validation error happened</response>

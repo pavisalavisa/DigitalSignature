@@ -1,4 +1,5 @@
 ﻿using Application.Certificates.Queries;
+using Application.Events.Queries.GetPersonalEvents;
 using Application.Signature.Commands.DownloadSignedPdf;
 using Application.Signature.Commands.SignBinary;
 using Application.Signature.Commands.SignPdf;
@@ -22,6 +23,7 @@ namespace Application
             AddUserServices(services);
             AddCertificateServices(services);
             AddSignatureServices(services);
+            AddEventServices(services);
 
             return services;
         }
@@ -49,6 +51,11 @@ namespace Application
             services.AddScoped<ISignBinaryCommand, SignBinaryCommand>();
             services.AddScoped<IVerifyPdfCommand, VerifyPdfCommand>();
             services.AddScoped<IVerifyBinaryCommand, VerifyBinaryCommand>();
+        }
+
+        private static void AddEventServices(IServiceCollection services)
+        {
+            services.AddScoped<IGetPersonalEventsQuery, GetPersonalEventsQuery>();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Application.Common.Models
 {
-    public abstract class FilterPagingQueryModel : PagingQueryModel
+    public class FilterPagingQueryModel : PagingQueryModel
     {
     }
 }
