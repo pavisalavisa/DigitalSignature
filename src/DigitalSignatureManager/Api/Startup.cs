@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using Api.Authentication;
 using Api.Filters;
 using Application;
@@ -37,8 +38,9 @@ namespace Api
             services.AddJwtAuthentication(Configuration);
 
             services.AddControllers(options => options.Filters.Add<ApiExceptionFilterAttribute>()).AddFluentValidation(
-                fv =>
-                    fv.RegisterValidatorsFromAssemblyContaining(typeof(Application.DependencyModule)));
+                    fv =>
+                        fv.RegisterValidatorsFromAssemblyContaining(typeof(Application.DependencyModule)))
+                .AddJsonOptions(opts => opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
             services.AddSwaggerGen(c =>
             {
@@ -61,7 +63,7 @@ namespace Api
                                     Type = ReferenceType.SecurityScheme
                                 },
                                 UnresolvedReference = true
-                            }, 
+                            },
                             new List<string>()
                         }
                     };
