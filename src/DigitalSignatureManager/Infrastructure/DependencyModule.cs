@@ -3,6 +3,7 @@ using Application.Common.Contracts;
 using Domain.Common;
 using Infrastructure.Certificates;
 using Infrastructure.DigitalSignature;
+using Infrastructure.Events;
 using Infrastructure.Identity.Services;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
@@ -27,6 +28,7 @@ namespace Infrastructure
             services.AddScoped<IDigitalSignatureService, DigitalSignatureService>();
             services.AddScoped<IRestClient, RestClient>();
             services.AddScoped<ICertificateService, CertificateService>();
+            services.AddScoped<IEventService, EventService>();
             services.AddIdentityServices();
             
             return services;

@@ -8,6 +8,7 @@ namespace Domain.Entities
     {
         public EventType Type { get; set; }
         public int TriggeredById { get; set; }
+        public string InputDocumentName { get; set; }
         public string InputDocumentB64 { get; set; }
         public string OutputDocumentB64 { get; set; }
         public bool IsSuccessful { get; set; }

@@ -2,6 +2,8 @@
 using Application.Common;
 using Application.Common.Contracts;
 using Application.Common.Models.DigitalSignatureModels;
+using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -13,13 +15,15 @@ namespace Application.Signature.Commands.SignPdf
         private readonly IDigitalSignatureService _signatureService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICertificateService _certificateService;
+        private readonly IEventService _eventService;
 
-        public SignPdfCommand(IDigitalSignatureService signatureService, IHttpContextAccessor httpContextAccessor, ILogger<SignPdfCommand> logger, ICertificateService certificateService)
+        public SignPdfCommand(IDigitalSignatureService signatureService, IHttpContextAccessor httpContextAccessor, ILogger<SignPdfCommand> logger, ICertificateService certificateService, IEventService eventService)
         {
             _signatureService = signatureService;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
             _certificateService = certificateService;
+            _eventService = eventService;
         }
 
         public async Task<SignedPdfResponseModel> Execute(SignPdfModel model)
@@ -32,6 +36,8 @@ namespace Application.Signature.Commands.SignPdf
 
             var response = await _signatureService.SignPdf(signatureModel);
 
+            await RecordEvent(model, response, userId);
+            
             return MapResponse(response);
         }
 
@@ -50,5 +56,26 @@ namespace Application.Signature.Commands.SignPdf
                 FileName = response.FileName,
                 SignedB64Bytes = response.SignedB64Bytes
             };
+        
+        private async Task RecordEvent(SignPdfModel model, InternalSignatureResponseModel response, int userId)
+        {
+            var @event = new Event
+            {
+                Type = EventType.Signature,
+                InputDocumentName = model.FileName,
+                InputDocumentB64 = model.B64Bytes,
+                OutputDocumentB64 = response.SignedB64Bytes,
+                TriggeredById = userId,
+                IsSuccessful = true
+            };
+
+            if (response.SignedB64Bytes is null)
+            {
+                @event.IsSuccessful = false;
+                @event.Error = "Something went wrong signing the file.";
+            }
+
+            await _eventService.RecordEvent(@event);
+        }
     }
 }

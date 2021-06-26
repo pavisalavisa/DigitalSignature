@@ -14,7 +14,8 @@ namespace Infrastructure.DigitalSignature
         private readonly ILogger<DigitalSignatureService> _logger;
         private readonly IRestClient _restClient;
 
-        public DigitalSignatureService(ILogger<DigitalSignatureService> logger, IRestClient restClient, IConfiguration configuration)
+        public DigitalSignatureService(ILogger<DigitalSignatureService> logger, IRestClient restClient,
+            IConfiguration configuration)
         {
             _logger = logger;
             _restClient = restClient;
@@ -28,23 +29,24 @@ namespace Infrastructure.DigitalSignature
             _restClient.BaseUrl = new Uri(digitalSignatureServiceBaseUri);
         }
 
-        public async Task<InternalSignatureResponseModel> SignPdf(InternalSignatureRequestModel requestModel) =>
-            await PostRequest<InternalSignatureResponseModel>(requestModel, "signature/pdf");
+        public Task<InternalSignatureResponseModel> SignPdf(InternalSignatureRequestModel requestModel) =>
+            PostRequest<InternalSignatureResponseModel>(requestModel, "signature/pdf");
 
-        public async Task<InternalSignatureResponseModel> SignBinary(InternalSignatureRequestModel requestModel) =>
-            await PostRequest<InternalSignatureResponseModel>(requestModel, "signature/binary");
+        public Task<InternalSignatureResponseModel> SignBinary(InternalSignatureRequestModel requestModel) =>
+            PostRequest<InternalSignatureResponseModel>(requestModel, "signature/binary");
 
-        public async Task<InternalVerificationResponseModel> VerifyPdf(BaseFileRequestModel requestModel) =>
-            await PostRequest<InternalVerificationResponseModel>(requestModel, "verification/pdf");
+        public Task<InternalVerificationResponseModel> VerifyPdf(BaseFileRequestModel requestModel) =>
+            PostRequest<InternalVerificationResponseModel>(requestModel, "verification/pdf");
 
-        public async Task<InternalVerificationResponseModel> VerifyBinary(InternalDetachedSignatureRequestModel requestModel) =>
-            await PostRequest<InternalVerificationResponseModel>(requestModel, "verification/binary");
+        public Task<InternalVerificationResponseModel>
+            VerifyBinary(InternalDetachedSignatureRequestModel requestModel) =>
+            PostRequest<InternalVerificationResponseModel>(requestModel, "verification/binary");
 
         private Task<T> PostRequest<T>(object requestModel, string route)
         {
             var request = new RestRequest(route, DataFormat.Json);
             request.AddJsonBody(requestModel);
-
+            
             // try
             // {
             return _restClient.PostAsync<T>(request);
