@@ -1,22 +1,14 @@
-import axios from "axios";
-
-const API_URL = "https://localhost:4201/api/";
+import { post } from "./baseApiService";
 
 const register = async ({ email, password }) => {
-  return await axios.post(API_URL + "Users/Registration", {
+  return await post("Users/Registration", {
     email,
     password,
   });
 };
 
 const login = async ({ email, password }) => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
-  return await axios.post(`${API_URL}Token`, { email, password }, config);
+  return await post("Token", { email, password });
 };
 
 const logout = () => {
