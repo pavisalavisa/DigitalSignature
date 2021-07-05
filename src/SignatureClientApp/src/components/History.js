@@ -16,14 +16,17 @@ import green from "@material-ui/core/colors/green";
 import red from "@material-ui/core/colors/red";
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 700,
   },
   tableHeaderText: {
     fontWeight: "bold",
   },
-});
+  titleContainer: {
+    margin: theme.spacing(4, 0, 0),
+  },
+}));
 
 function History(props) {
   const [history, setHistory] = useState();
@@ -43,9 +46,9 @@ function History(props) {
   };
 
   return (
-    <Grid container direction="row" spacing={4} justify="center">
-      <Grid item>
-        <Typography variant="h5" component="h3" align="center">
+    <Grid container direction="row" spacing={4} mar justify="center">
+      <Grid item className={classes.titleContainer}>
+        <Typography variant="h4" component="h2" align="center">
           History
         </Typography>
       </Grid>
