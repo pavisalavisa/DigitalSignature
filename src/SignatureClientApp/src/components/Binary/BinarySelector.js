@@ -11,7 +11,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { TextField } from "@material-ui/core";
+import { base64toBlob } from "../../common/encodingHelpers";
 
 function BinarySelector(props) {
   const {
@@ -48,6 +48,7 @@ function BinarySelector(props) {
       );
 
       setVerificationResult(verificationResponse);
+      setVerifyDialogOpened(false);
       snackbarShowMessage("Successfully verified the file");
     } finally {
       setIsLoadingSubmit(false);
@@ -60,9 +61,9 @@ function BinarySelector(props) {
     try {
       setIsLoadingSubmit(true);
 
-      const signedFile = await signBinary(selectedFile);
+      const { fileName, signedB64Bytes } = await signBinary(selectedFile);
 
-      saveAs(signedFile, `${selectedFile.name}_signature`);
+      saveAs(base64toBlob(signedB64Bytes), `${fileName}`);
 
       snackbarShowMessage("File signature is downloaded.");
     } finally {
