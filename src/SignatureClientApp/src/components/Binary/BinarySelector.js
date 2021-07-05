@@ -7,7 +7,7 @@ import BorderColorIcon from "@material-ui/icons/BorderColor";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import { withSnackbar } from "../Snackbar";
 
-function PdfSelector(props) {
+function BinarySelector(props) {
   const {
     setIsLoadingSubmit,
     setVerificationResult,
@@ -56,7 +56,7 @@ function PdfSelector(props) {
     <Grid container justify="space-around" spacing={10}>
       <Grid item xs={12} md={12} lg={12} xl={12}>
         <Typography align="center" component="h2" variant="h4">
-          Select a PDF you would like to sign
+          Select a file you would like to sign
         </Typography>
       </Grid>
       <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -64,7 +64,7 @@ function PdfSelector(props) {
           type="file"
           variant="outlined"
           onChange={changeHandler}
-          placeholder="Choose a PDF file"
+          placeholder="Choose a file"
         />
       </Grid>
       <Grid item>
@@ -100,4 +100,4 @@ function PdfSelector(props) {
   );
 }
 
-export default withSnackbar(PdfSelector);
+export default withSnackbar(BinarySelector);

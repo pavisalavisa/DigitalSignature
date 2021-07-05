@@ -42,7 +42,7 @@ const primaryDrawerItems = [
     text: "Other Files",
     DrawerIcon: FolderIcon,
     onClick: (history) => {
-      history.push("/binary");
+      history.push("/other-files");
     },
   },
   {
