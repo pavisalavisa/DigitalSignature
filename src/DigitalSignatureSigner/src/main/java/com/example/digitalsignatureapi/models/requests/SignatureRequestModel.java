@@ -1,8 +1,10 @@
 package com.example.digitalsignatureapi.models.requests;
 
+import com.example.digitalsignatureapi.common.SignatureProfile;
+
 public class SignatureRequestModel extends BaseFileRequestModel {
     private CertificateModel certificate;
-    private boolean includeTimestamp;
+    private SignatureProfile profile;
 
     public CertificateModel getCertificate() {
         return certificate;
@@ -12,11 +14,11 @@ public class SignatureRequestModel extends BaseFileRequestModel {
         this.certificate = certificate;
     }
 
-    public boolean isIncludeTimestamp() {
-        return includeTimestamp;
+    public SignatureProfile getProfile() {
+        return profile;
     }
 
-    public void setIncludeTimestamp(boolean includeTimestamp) {
-        this.includeTimestamp = includeTimestamp;
+    public void setProfile(SignatureProfile profile) {
+        this.profile = profile;
     }
 }

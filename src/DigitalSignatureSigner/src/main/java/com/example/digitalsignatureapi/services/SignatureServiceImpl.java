@@ -27,12 +27,6 @@ import java.util.List;
 
 @Service
 public class SignatureServiceImpl implements SignatureService {
-
-    private final SignatureLevel DefaultPdfSignatureLevel = SignatureLevel.PAdES_BASELINE_B;
-    private final SignatureLevel DefaultXadesSignatureLevel = SignatureLevel.XAdES_BASELINE_B;
-    private final SignatureLevel TimestampPdfSignatureLevel = SignatureLevel.PAdES_BASELINE_T;
-    private final SignatureLevel TimestampXadesSignatureLevel = SignatureLevel.XAdES_BASELINE_T;
-
     private final DigestAlgorithm DefaultDigestAlgorithm = DigestAlgorithm.SHA256;
 
     private final int SignatureSize = 20000;
@@ -45,16 +39,16 @@ public class SignatureServiceImpl implements SignatureService {
         this.xadesService = xadesService;
     }
 
-    public DSSDocument SignPdf(CertificateModel certificate, DSSDocument document, boolean includeTimestamp) {
+    public DSSDocument SignPdf(CertificateModel certificate, DSSDocument document, SignatureLevel signatureLevel) {
         Pkcs12SignatureToken token = BuildSignatureToken(certificate.getB64Certificate(), certificate.getCertificatePassword());
         DSSPrivateKeyEntry privateKey = GetPrivateKey(token);
 
-        PAdESSignatureParameters parameters = GetPadesParameters(privateKey.getCertificate().getCertificate(), privateKey.getCertificateChain(), includeTimestamp);
+        PAdESSignatureParameters parameters = GetPadesParameters(privateKey.getCertificate().getCertificate(), privateKey.getCertificateChain(), signatureLevel);
 
         // Get the SignedInfo segment that need to be signed.
         ToBeSigned dataToSign = padesService.getDataToSign(document, parameters);
 
-        if (includeTimestamp) {
+        if (signatureLevel != SignatureLevel.PAdES_BASELINE_B) {
             TimestampToken contentTimestamp = padesService.getContentTimestamp(document, parameters);
             parameters.setContentTimestamps(Collections.singletonList(contentTimestamp));
         }
@@ -65,16 +59,16 @@ public class SignatureServiceImpl implements SignatureService {
         return padesService.signDocument(document, parameters, signatureValue);
     }
 
-    public DSSDocument SignBinary(CertificateModel certificate, DSSDocument document, boolean includeTimestamp) {
+    public DSSDocument SignBinary(CertificateModel certificate, DSSDocument document, SignatureLevel signatureLevel) {
         Pkcs12SignatureToken token = BuildSignatureToken(certificate.getB64Certificate(), certificate.getCertificatePassword());
         DSSPrivateKeyEntry privateKey = GetPrivateKey(token);
 
-        XAdESSignatureParameters parameters = GetXadesParameters(privateKey.getCertificate().getCertificate(), privateKey.getCertificateChain(), includeTimestamp);
+        XAdESSignatureParameters parameters = GetXadesParameters(privateKey.getCertificate().getCertificate(), privateKey.getCertificateChain(), signatureLevel);
 
         // Get the SignedInfo XML segment that need to be signed.
         ToBeSigned dataToSign = xadesService.getDataToSign(document, parameters);
 
-        if (includeTimestamp) {
+        if (signatureLevel!= SignatureLevel.XAdES_BASELINE_B) {
             TimestampToken contentTimestamp = xadesService.getContentTimestamp(document, parameters);
             parameters.setContentTimestamps(Collections.singletonList(contentTimestamp));
         }
@@ -97,11 +91,11 @@ public class SignatureServiceImpl implements SignatureService {
         return new Pkcs12SignatureToken(certificateBytes, new KeyStore.PasswordProtection(password.toCharArray()));
     }
 
-    private PAdESSignatureParameters GetPadesParameters(X509Certificate certificate, CertificateToken[] certificateChain, boolean includeTimestamp) {
+    private PAdESSignatureParameters GetPadesParameters(X509Certificate certificate, CertificateToken[] certificateChain, SignatureLevel signatureLevel) {
         PAdESSignatureParameters parameters = new PAdESSignatureParameters();
 
         // We choose the level of the signature (-B, -T, -LT, -LTA).
-        parameters.setSignatureLevel(includeTimestamp ? TimestampPdfSignatureLevel : DefaultPdfSignatureLevel);
+        parameters.setSignatureLevel(signatureLevel);
         // We set the digest algorithm to use with the signature algorithm. You must use the
         // same parameter when you invoke the method sign on the token. The default value is
         // SHA256
@@ -118,9 +112,9 @@ public class SignatureServiceImpl implements SignatureService {
         return parameters;
     }
 
-    private XAdESSignatureParameters GetXadesParameters(X509Certificate certificate, CertificateToken[] certificateChain, boolean includeTimestamp) {
+    private XAdESSignatureParameters GetXadesParameters(X509Certificate certificate, CertificateToken[] certificateChain, SignatureLevel signatureLevel) {
         XAdESSignatureParameters parameters = new XAdESSignatureParameters();
-        parameters.setSignatureLevel(includeTimestamp ? TimestampXadesSignatureLevel : DefaultXadesSignatureLevel);
+        parameters.setSignatureLevel(signatureLevel);
         // We choose the type of the signature packaging (ENVELOPED, ENVELOPING, DETACHED).
         parameters.setSignaturePackaging(SignaturePackaging.DETACHED);
         // We set the digest algorithm to use with the signature algorithm. You must use the
