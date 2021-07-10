@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     marginTop: navbarMinHeight,
-    overflowX: "hidden"
+    overflow: "hidden"
   },
 }));
 

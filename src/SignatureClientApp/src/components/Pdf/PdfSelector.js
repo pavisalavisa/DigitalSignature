@@ -56,7 +56,7 @@ function PdfSelector(props) {
     <Grid container justify="space-around" spacing={10}>
       <Grid item xs={12} md={12} lg={12} xl={12}>
         <Typography align="center" component="h2" variant="h4">
-          Select a file you would like to sign
+          Select a PDF you would like to sign
         </Typography>
       </Grid>
       <Grid item xs={6} md={6} lg={6} xl={6}>

@@ -11,16 +11,6 @@ const useStyles = makeStyles((theme) => ({
     height: "93.5vh",
     overflow: "scroll",
   },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  spinner: {
-    margin: theme.spacing(3, 0, 2),
-  },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: "#fff",

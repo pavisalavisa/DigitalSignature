@@ -89,7 +89,7 @@ export default (props) => {
                 <Button
                   size="medium"
                   color="primary"
-                  onClick={() => history.push("/binary")}
+                  onClick={() => history.push("/other-files")}
                 >
                   Sign or verify
                 </Button>
