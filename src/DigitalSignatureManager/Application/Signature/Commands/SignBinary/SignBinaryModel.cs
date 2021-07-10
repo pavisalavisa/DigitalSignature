@@ -1,5 +1,6 @@
 ﻿using Application.Common.ErrorManagement.ErrorCodes;
 using Common.Extensions;
+using Domain.Enums;
 using FluentValidation;
 
 namespace Application.Signature.Commands.SignBinary
@@ -8,7 +9,8 @@ namespace Application.Signature.Commands.SignBinary
     {
         public string FileName { get; set; }
         public string B64Bytes { get; set; }
-
+        public SignatureProfile Profile { get; set; }
+        
         public class Validator : AbstractValidator<SignBinaryModel>
         {
             public Validator()
@@ -19,6 +21,11 @@ namespace Application.Signature.Commands.SignBinary
                 RuleFor(x => x.B64Bytes)
                     .IsB64String()
                     .WithCodedErrorMessage(SignatureErrorCodes.InvalidBinarySignatureModel with {Details = "B64Bytes must be a valid B64 string."});
+                
+                RuleFor(x => x.Profile)
+                    .NotNull()
+                    .IsInEnum()
+                    .WithCodedErrorMessage(SignatureErrorCodes.InvalidPdfSignatureModel with {Details = "Profile must be one of the following values: B, T, LT, LTA."});
             }
         }
     }

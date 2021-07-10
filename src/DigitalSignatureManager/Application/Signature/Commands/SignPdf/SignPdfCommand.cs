@@ -17,7 +17,8 @@ namespace Application.Signature.Commands.SignPdf
         private readonly ICertificateService _certificateService;
         private readonly IEventService _eventService;
 
-        public SignPdfCommand(IDigitalSignatureService signatureService, IHttpContextAccessor httpContextAccessor, ILogger<SignPdfCommand> logger, ICertificateService certificateService, IEventService eventService)
+        public SignPdfCommand(IDigitalSignatureService signatureService, IHttpContextAccessor httpContextAccessor,
+            ILogger<SignPdfCommand> logger, ICertificateService certificateService, IEventService eventService)
         {
             _signatureService = signatureService;
             _httpContextAccessor = httpContextAccessor;
@@ -37,7 +38,7 @@ namespace Application.Signature.Commands.SignPdf
             var response = await _signatureService.SignPdf(signatureModel);
 
             await RecordEvent(model, response, userId);
-            
+
             return MapResponse(response);
         }
 
@@ -46,9 +47,9 @@ namespace Application.Signature.Commands.SignPdf
             {
                 B64Bytes = model.B64Bytes,
                 FileName = model.FileName,
-                Certificate = await _certificateService.GetUserCertificate(userId)
+                Certificate = await _certificateService.GetUserCertificate(userId),
+                Profile = model.Profile
             };
-
 
         private SignedPdfResponseModel MapResponse(InternalSignatureResponseModel response) =>
             new()
@@ -56,7 +57,7 @@ namespace Application.Signature.Commands.SignPdf
                 FileName = response.FileName,
                 SignedB64Bytes = response.SignedB64Bytes
             };
-        
+
         private async Task RecordEvent(SignPdfModel model, InternalSignatureResponseModel response, int userId)
         {
             var @event = new Event

@@ -68,7 +68,7 @@ public class SignatureServiceImpl implements SignatureService {
         // Get the SignedInfo XML segment that need to be signed.
         ToBeSigned dataToSign = xadesService.getDataToSign(document, parameters);
 
-        if (signatureLevel!= SignatureLevel.XAdES_BASELINE_B) {
+        if (signatureLevel != SignatureLevel.XAdES_BASELINE_B) {
             TimestampToken contentTimestamp = xadesService.getContentTimestamp(document, parameters);
             parameters.setContentTimestamps(Collections.singletonList(contentTimestamp));
         }
