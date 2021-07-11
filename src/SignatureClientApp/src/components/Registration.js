@@ -60,7 +60,7 @@ export default () => {
     setIsLoading(true);
 
     try {
-      await authenticationService.register({ email, password });
+      await authenticationService.register({ email, password, firstName, lastName });
 
       setIsRegistrationSuccessful(true);
     } catch (e) {
