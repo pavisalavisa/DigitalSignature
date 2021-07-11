@@ -1,9 +1,11 @@
 import { post } from "./baseApiService";
 
-const register = async ({ email, password }) => {
+const register = async ({ email, password, firstName, lastName }) => {
   return await post("Users/Registration", {
     email,
     password,
+    firstName,
+    lastName
   });
 };
 

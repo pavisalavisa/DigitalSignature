@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Application.Common.Contracts;
 using Application.Users.Commands.RegisterUser;
 using Domain.Common;
@@ -29,7 +28,7 @@ namespace UnitTests.Application.Users
             _context = new DigitalSignatureManagerDbContext(ContextOptions);
 
             _userManager.Setup(x => x.AddToRole(It.IsAny<int>(), It.IsAny<Roles>())).Returns(Task.CompletedTask);
-            _userManager.Setup(x => x.CreateUser(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new ApplicationUser {Id = 1});
+            _userManager.Setup(x => x.CreateUser(It.IsAny<RegisterUserModel>())).ReturnsAsync(new ApplicationUser {Id = 1});
 
             _command = new RegisterUserCommand(_userManager.Object, _logger.Object, _context);
         }
@@ -45,7 +44,7 @@ namespace UnitTests.Application.Users
 
             await _command.Execute(model);
 
-            _userManager.Verify(x => x.CreateUser("jon.doe@yahoo.com", "SubparPassword"), Times.Once);
+            _userManager.Verify(x => x.CreateUser(model), Times.Once);
         }
 
         [Test]

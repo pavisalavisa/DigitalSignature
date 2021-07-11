@@ -69,33 +69,5 @@ namespace UnitTests.Application.Users
             Assert.IsFalse(result.IsValid);
             Assert.GreaterOrEqual(result.Errors.Count, 1);
         }
-
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("     ")]
-        [TestCase(null)]
-        public void GivenEmptyCountry_Validate_ShouldHaveAValidationError(string country)
-        {
-            var model = new RegisterUserModel {Email = "colin.f@gmail.com", Password = "Admin.123!"};
-
-            var result = _validator.Validate(model);
-
-            Assert.IsFalse(result.IsValid);
-            Assert.GreaterOrEqual(result.Errors.Count, 1);
-        }
-        
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("     ")]
-        [TestCase(null)]
-        public void GivenEmptyTeamName_Validate_ShouldHaveAValidationError(string teamName)
-        {
-            var model = new RegisterUserModel {Email = "colin.f@gmail.com", Password = "Admin.123!"};
-
-            var result = _validator.Validate(model);
-
-            Assert.IsFalse(result.IsValid);
-            Assert.GreaterOrEqual(result.Errors.Count, 1);
-        }
     }
 }

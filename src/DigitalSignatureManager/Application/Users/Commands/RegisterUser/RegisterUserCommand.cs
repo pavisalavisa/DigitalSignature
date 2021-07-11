@@ -22,15 +22,13 @@ namespace Application.Users.Commands.RegisterUser
         public async Task<EntityCreatedModel> Execute(RegisterUserModel model)
         {
             _logger.LogInformation($"Creating user with email {model.Email}.");
-            var user = await _userManager.CreateUser(model.Email, model.Password);
+            var user = await _userManager.CreateUser(model);
             await _userManager.AddToRole(user.Id, Roles.RegularUser);
 
             _logger.LogInformation($"User with email {model.Email} successfully created.");
 
             await _context.SaveChangesAsync();
-
-            _logger.LogInformation($"Created a team for user {model.Email}.");
-
+            
             return new EntityCreatedModel(user.Id);
         }
     }

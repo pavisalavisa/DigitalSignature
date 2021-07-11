@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Common.Contracts;
+using Application.Users.Commands.RegisterUser;
 using Domain.Common;
 using Domain.Enums;
 using Microsoft.AspNetCore.Identity;
@@ -27,26 +28,29 @@ namespace Infrastructure.Identity.Services
             _logger = logger;
         }
 
-        public async Task<ApplicationUser> CreateUser(string email, string password)
+        public async Task<ApplicationUser> CreateUser(RegisterUserModel userModel)
         {
             var user = new ApplicationUser
             {
-                UserName = email,
-                Email = email
+                UserName = userModel.Email,
+                Email = userModel.Email, 
+                FirstName = userModel.FirstName,
+                LastName = userModel.LastName,
+                OrganizationName = userModel.OrganizationName
             };
 
-            var result = await base.CreateAsync(user, password);
+            var result = await base.CreateAsync(user, userModel.Password);
 
             if (!result.Succeeded)
                 throw new ApplicationException(
-                    $"Something went wrong while creating user {email}: {string.Join(",", result.Errors.Select(e => $"{e.Code}:{e.Description}"))}");
+                    $"Something went wrong while creating user {userModel.Email}: {string.Join(",", result.Errors.Select(e => $"{e.Code}:{e.Description}"))}");
 
             return user;
         }
 
         public async Task AddToRole(int userId, Roles role)
         {
-            var user = await base.FindByIdAsync(userId.ToString()); //TODO: What???
+            var user = await base.FindByIdAsync(userId.ToString());
             if (user is null)
                 throw new ApplicationException($"User with id {userId} does not exist.");
 
