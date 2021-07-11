@@ -27,7 +27,7 @@ public class VerificationServiceImpl implements VerificationService {
     public SimpleReport VerifySignedPdf(DSSDocument document) {
         SignedDocumentValidator validator = SignedDocumentValidator.fromDocument(document);
 
-        validator.setValidationLevel(ValidationLevel.BASIC_SIGNATURES);
+        validator.setValidationLevel(ValidationLevel.TIMESTAMPS);
         validator.setCertificateVerifier(this.certificateVerifier);
         validator.setTokenExtractionStrategy(TokenExtractionStrategy.EXTRACT_CERTIFICATES_ONLY);
 
@@ -40,7 +40,7 @@ public class VerificationServiceImpl implements VerificationService {
     public SimpleReport VerifySignedBinary(DSSDocument originalDocument, DSSDocument xadesSignature) {
         SignedDocumentValidator validator = SignedDocumentValidator.fromDocument(xadesSignature);
 
-        validator.setValidationLevel(ValidationLevel.BASIC_SIGNATURES);
+        validator.setValidationLevel(ValidationLevel.TIMESTAMPS);
         validator.setCertificateVerifier(this.certificateVerifier);
         validator.setTokenExtractionStrategy(TokenExtractionStrategy.EXTRACT_CERTIFICATES_ONLY);
         validator.setDetachedContents(Arrays.asList(originalDocument));
