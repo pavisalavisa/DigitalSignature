@@ -8,7 +8,8 @@ namespace Application.Users.Commands.UpdateUser
 {
     public class UpdateUserCommand : BaseUpdateCommand<ApplicationUser, UpdateUserModel>, IUpdateUserCommand
     {
-        public UpdateUserCommand(IDigitalSignatureManagerDbContext context, ILogger<BaseUpdateCommand<ApplicationUser, UpdateUserModel>> logger) : base(context, logger)
+        public UpdateUserCommand(IDigitalSignatureManagerDbContext context,
+            ILogger<BaseUpdateCommand<ApplicationUser, UpdateUserModel>> logger) : base(context, logger)
         {
         }
 
@@ -16,6 +17,9 @@ namespace Application.Users.Commands.UpdateUser
         {
             entity.Email = model.Email;
             entity.NormalizedEmail = model.Email.ToUpperInvariant();
+            entity.FirstName = model.FirstName;
+            entity.LastName = model.LastName;
+            entity.OrganizationName = model.OrganizationName;
 
             return Task.CompletedTask;
         }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Common.Contracts;
+using Application.Users.Commands.RegisterUser;
 using Domain.Enums;
 
 namespace Infrastructure.Persistence
@@ -39,7 +40,14 @@ namespace Infrastructure.Persistence
 
             if (!context.Users.Any(usr => usr.UserName == seedAdminUsername))
             {
-                var user = await userManager.CreateUser(seedAdminUsername, "Admin.123");
+                var user = await userManager.CreateUser(new RegisterUserModel
+                {
+                    Email = seedAdminUsername,
+                    Password = "Admin.123",
+                    FirstName= "Antonio",
+                    LastName = "Kristicevic",
+                    OrganizationName = "FESB"
+                });
                 await userManager.AddToRole(user.Id, Roles.Admin);
             }
         }
