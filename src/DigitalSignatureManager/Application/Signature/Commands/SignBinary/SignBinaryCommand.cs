@@ -17,7 +17,8 @@ namespace Application.Signature.Commands.SignBinary
         private readonly ICertificateService _certificateService;
         private readonly IEventService _eventService;
 
-        public SignBinaryCommand(IDigitalSignatureService signatureService, IHttpContextAccessor httpContextAccessor, ILogger<SignBinaryCommand> logger, ICertificateService certificateService, IEventService eventService)
+        public SignBinaryCommand(IDigitalSignatureService signatureService, IHttpContextAccessor httpContextAccessor,
+            ILogger<SignBinaryCommand> logger, ICertificateService certificateService, IEventService eventService)
         {
             _signatureService = signatureService;
             _httpContextAccessor = httpContextAccessor;
@@ -37,7 +38,7 @@ namespace Application.Signature.Commands.SignBinary
             var response = await _signatureService.SignBinary(signatureModel);
 
             await RecordEvent(model, response, userId);
-            
+
             return MapResponse(response);
         }
 
@@ -46,7 +47,8 @@ namespace Application.Signature.Commands.SignBinary
             {
                 B64Bytes = model.B64Bytes,
                 FileName = model.FileName,
-                Certificate = await _certificateService.GetUserCertificate(userId)
+                Certificate = await _certificateService.GetUserCertificate(userId),
+                Profile = model.Profile
             };
 
         private SignedBinaryResponseModel MapResponse(InternalSignatureResponseModel response) =>
