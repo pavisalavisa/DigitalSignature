@@ -13,7 +13,6 @@ import eu.europa.esig.dss.pades.PAdESSignatureParameters;
 import eu.europa.esig.dss.pades.signature.PAdESService;
 import eu.europa.esig.dss.token.DSSPrivateKeyEntry;
 import eu.europa.esig.dss.token.Pkcs12SignatureToken;
-import eu.europa.esig.dss.validation.timestamp.TimestampToken;
 import eu.europa.esig.dss.xades.XAdESSignatureParameters;
 import eu.europa.esig.dss.xades.signature.XAdESService;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,6 @@ import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -48,11 +46,6 @@ public class SignatureServiceImpl implements SignatureService {
         // Get the SignedInfo segment that need to be signed.
         ToBeSigned dataToSign = padesService.getDataToSign(document, parameters);
 
-        if (signatureLevel != SignatureLevel.PAdES_BASELINE_B) {
-            TimestampToken contentTimestamp = padesService.getContentTimestamp(document, parameters);
-            parameters.setContentTimestamps(Collections.singletonList(contentTimestamp));
-        }
-
         SignatureValue signatureValue = token.sign(dataToSign, parameters.getDigestAlgorithm(), privateKey);
 
         // We invoke the padesService to sign the document with the signature value obtained in the previous step.
@@ -67,11 +60,6 @@ public class SignatureServiceImpl implements SignatureService {
 
         // Get the SignedInfo XML segment that need to be signed.
         ToBeSigned dataToSign = xadesService.getDataToSign(document, parameters);
-
-        if (signatureLevel != SignatureLevel.XAdES_BASELINE_B) {
-            TimestampToken contentTimestamp = xadesService.getContentTimestamp(document, parameters);
-            parameters.setContentTimestamps(Collections.singletonList(contentTimestamp));
-        }
 
         SignatureValue signatureValue = token.sign(dataToSign, parameters.getDigestAlgorithm(), privateKey);
 

@@ -2,9 +2,9 @@ namespace Domain.Enums
 {
     public enum SignatureProfile
     {
-        B = 1,
-        T = 2,
-        LT = 3,
-        LTA = 4
+        B = 0,
+        T = 1,
+        LT = 2,
+        LTA = 3
     }
 }
