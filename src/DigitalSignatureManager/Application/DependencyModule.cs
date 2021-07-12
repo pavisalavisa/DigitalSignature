@@ -10,6 +10,7 @@ using Application.Users.Commands.DeleteUser;
 using Application.Users.Commands.RegisterUser;
 using Application.Users.Commands.UpdateUser;
 using Application.Users.Queries.GetAllUsers;
+using Application.Users.Queries.GetPersonalInformation;
 using Application.Users.Queries.GetUserById;
 using Application.Verification.Commands.VerifyBinary;
 using Application.Verification.Commands.VerifyPdf;
@@ -37,6 +38,7 @@ namespace Application
             services.AddScoped<IUpdateUserCommand, UpdateUserCommand>();
             services.AddScoped<IDeleteUserCommand, DeleteUserCommand>();
             services.AddScoped<IAssignCertificateCommand, AssignCertificateCommand>();
+            services.AddScoped<IGetPersonalInformationQuery, GetPersonalInformationQuery>();
         }
 
         private static void AddCertificateServices(IServiceCollection services)

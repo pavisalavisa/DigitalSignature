@@ -18,7 +18,9 @@ namespace Application.Users.Queries.GetUserById
             {
                 Email = u.Email,
                 Id = u.Id,
-                Name = u.UserName
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                OrganizationName = u.OrganizationName
             };
     }
 }

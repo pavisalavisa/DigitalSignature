@@ -5,6 +5,7 @@ using Application.Users.Commands.DeleteUser;
 using Application.Users.Commands.RegisterUser;
 using Application.Users.Commands.UpdateUser;
 using Application.Users.Queries.GetAllUsers;
+using Application.Users.Queries.GetPersonalInformation;
 using Application.Users.Queries.GetUserById;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -78,7 +79,7 @@ namespace Api.Controllers
         /// <response code ="404">User does not exist</response>
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<ActionResult<UserModel>> Get([FromRoute] int id, [FromServices] IGetUserByIdQuery query)
         {
             var user = await query.Query(id);
@@ -108,7 +109,7 @@ namespace Api.Controllers
         /// <response code ="400">Validation error happened</response>
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<ActionResult> Put([FromRoute] int id, [FromBody] UpdateUserModel model, [FromServices] IUpdateUserCommand command)
         {
             await command.Execute(model, id);
@@ -131,7 +132,7 @@ namespace Api.Controllers
         /// <response code ="400">Validation error happened</response>
         [HttpDelete]
         [Authorize(Roles = "Admin")]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<ActionResult> Delete([FromRoute] int id, [FromServices] IDeleteUserCommand command)
         {
             await command.Execute(id);
@@ -165,6 +166,34 @@ namespace Api.Controllers
             await command.Execute(model);
 
             return Ok();
+        }
+        
+        /// <summary>
+        /// Get the personal information of currently authenticated user
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /api/Users/PersonalInformation
+        ///
+        /// </remarks>
+        /// <returns>Ok with personal information json body</returns>
+        /// <response code ="200">Personal information was successfully fetched</response>
+        /// <response code ="400">Validation error happened</response>
+        /// <response code ="401">Authentication error happened</response>
+        /// <response code ="404">Personal information does not exist</response>
+        [HttpGet]
+        [Authorize(Roles = "Admin, RegularUser")]
+        [Route("PersonalInformation")]
+        public async Task<ActionResult> PostCertificate([FromServices] IGetPersonalInformationQuery query)
+        {
+            var personalInformation = await query.Query();
+            if (personalInformation is null)
+            {
+                return new NotFoundResult();
+            }
+                
+            return Ok(personalInformation);
         }
     }
 }
