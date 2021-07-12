@@ -8,6 +8,7 @@ using Application.Signature.Queries.GetSignatureServiceHealth;
 using Application.Users.Commands.AssignCertificate;
 using Application.Users.Commands.DeleteUser;
 using Application.Users.Commands.RegisterUser;
+using Application.Users.Commands.UpdatePersonalInformation;
 using Application.Users.Commands.UpdateUser;
 using Application.Users.Queries.GetAllUsers;
 using Application.Users.Queries.GetPersonalInformation;
@@ -39,6 +40,7 @@ namespace Application
             services.AddScoped<IDeleteUserCommand, DeleteUserCommand>();
             services.AddScoped<IAssignCertificateCommand, AssignCertificateCommand>();
             services.AddScoped<IGetPersonalInformationQuery, GetPersonalInformationQuery>();
+            services.AddScoped<IUpdatePersonalInformationCommand, UpdatePersonalInformationCommand>();
         }
 
         private static void AddCertificateServices(IServiceCollection services)
