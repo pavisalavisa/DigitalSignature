@@ -12,6 +12,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Fade from "@material-ui/core/Fade";
 import AuthContext from "../context/auth/authContext";
 import { Container } from "@material-ui/core";
+import { withSnackbar } from "./Snackbar";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,20 +37,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default (props) => {
-  const { history } = props;
+function Login(props) {
+  const { history, snackbarShowMessage } = props;
   const classes = useStyles();
 
   const authContext = useContext(AuthContext);
-  const { login, error, clearErrors, isAuthenticated, loading } = authContext;
+  const { login, error, isAuthenticated, loading } = authContext;
 
   useEffect(() => {
     if (isAuthenticated) {
       history.push("/");
     }
 
-    if (error === "Invalid Credentials") {
-      clearErrors();
+    if (!!error) {
+      snackbarShowMessage(error, "error");
     }
   }, [error, isAuthenticated, history]);
 
@@ -138,4 +139,6 @@ export default (props) => {
       </Grid>
     </Container>
   );
-};
+}
+
+export default withSnackbar(Login);
