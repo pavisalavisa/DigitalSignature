@@ -5,7 +5,7 @@ const register = async ({ email, password, firstName, lastName }) => {
     email,
     password,
     firstName,
-    lastName
+    lastName,
   });
 };
 
