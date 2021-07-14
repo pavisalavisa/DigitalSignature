@@ -16,7 +16,7 @@ namespace UnitTests.Application.Users
         {
             _userManager = new Mock<IApplicationUserManager>(MockBehavior.Strict);
 
-            _userManager.Setup(x => x.EmailExists(It.IsAny<string>())).ReturnsAsync(false);
+            _userManager.Setup(x => x.EmailExists(It.IsAny<string>(), It.IsAny<int?>())).ReturnsAsync(false);
 
             _validator = new RegisterUserModel.RegisterUserModelValidator(_userManager.Object);
         }
@@ -48,7 +48,7 @@ namespace UnitTests.Application.Users
         {
             var model = new RegisterUserModel {Email = "colin.f@gmail.com", Password = "SuperbPassword.123"};
 
-            _userManager.Setup(x => x.EmailExists("colin.f@gmail.com")).ReturnsAsync(true);
+            _userManager.Setup(x => x.EmailExists("colin.f@gmail.com", null)).ReturnsAsync(true);
 
             var result = _validator.Validate(model);
 
