@@ -1,11 +1,19 @@
-import { Button, Typography } from "@material-ui/core";
+import {
+  Button,
+  Typography,
+  TextField,
+  Divider,
+  CircularProgress,
+  Backdrop,
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { getPersonalInfo, updatePersonalInfo } from "../services/userManagementService";
-import { Divider } from "@material-ui/core";
-import { CircularProgress } from "@material-ui/core";
-import { TextField } from "@material-ui/core";
+import {
+  getPersonalInfo,
+  updatePersonalInfo,
+} from "../../services/userManagementService";
 import { makeStyles } from "@material-ui/core";
-import { withSnackbar } from "./Snackbar";
+import { withSnackbar } from "../Snackbar";
+import Certificate from "./Certificate";
 
 const useStyles = makeStyles((theme) => ({
   accountContainer: {
@@ -22,23 +30,27 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(2),
     },
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
+  },
 }));
 
-function Account({snackbarShowMessage}) {
+function Account({ snackbarShowMessage }) {
+  const { accountContainer, buttonGroup, backdrop } = useStyles();
   const [accountInfo, setAccountInfo] = useState();
-  const { accountContainer, buttonGroup } = useStyles();
   const [isDirty, setIsDirty] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function fetchAndAssign() {
     const personalInfo = await getPersonalInfo();
-    console.log(personalInfo);
     setAccountInfo(personalInfo);
     setIsDirty(false);
   }
 
-  async function saveChanges(){
+  async function saveChanges() {
     await updatePersonalInfo(accountInfo);
-    snackbarShowMessage("Account updated")
+    snackbarShowMessage("Account updated");
     setIsDirty(false);
   }
 
@@ -117,25 +129,23 @@ function Account({snackbarShowMessage}) {
         )}
         <Divider />
       </div>
-      <div>
-        <div>
-          <Typography variant="h4">Certificate</Typography>
-          <Typography variant="subtitle2" color="textSecondary">
-            Import/Export certificate used for digital signature services
-          </Typography>
-        </div>
-        <div className={buttonGroup}>
-          <Button variant="outlined">Import</Button>
-          <Button variant="outlined">Export</Button>
-        </div>
-        <Divider />
-      </div>
+      <Certificate
+        snackbarShowMessage={snackbarShowMessage}
+      />
       <div className={buttonGroup}>
-        <Button disabled={!isDirty} color="primary" variant="contained" onClick={()=> saveChanges()}>
+        <Button
+          disabled={!isDirty}
+          color="primary"
+          variant="contained"
+          onClick={() => saveChanges()}
+        >
           Save
         </Button>
         <Button onClick={() => fetchAndAssign()}>Cancel</Button>
       </div>
+      <Backdrop className={backdrop} open={isLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 }
