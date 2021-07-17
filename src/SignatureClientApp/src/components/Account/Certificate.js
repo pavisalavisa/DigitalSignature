@@ -8,7 +8,11 @@ import {
   Backdrop,
   CircularProgress,
 } from "@material-ui/core";
-import { assignCertificate } from "../../services/userManagementService";
+import {
+  assignCertificate,
+  exportCertificate,
+} from "../../services/userManagementService";
+import { saveAs } from "file-saver";
 
 import { makeStyles } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
@@ -29,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   backdrop: {
-    zIndex: theme.zIndex.drawer + 10,
+    zIndex: theme.zIndex.drawer + 1,
     color: "#fff",
   },
 }));
@@ -68,6 +72,12 @@ function Certificate({ snackbarShowMessage }) {
     }
   };
 
+  const handleExportCertificate = async () => {
+    const cert = await exportCertificate();
+
+    saveAs(cert, "PersonalCertificate.p12");
+  };
+
   return (
     <div>
       <div>
@@ -80,7 +90,9 @@ function Certificate({ snackbarShowMessage }) {
         <Button variant="outlined" onClick={() => setImportDialogOpened(true)}>
           Import
         </Button>
-        <Button variant="outlined">Export</Button>
+        <Button variant="outlined" onClick={handleExportCertificate}>
+          Export
+        </Button>
       </div>
       <Divider />
       <Dialog
@@ -98,7 +110,7 @@ function Certificate({ snackbarShowMessage }) {
             type="file"
             variant="outlined"
             onChange={certificateFileChangeHandler}
-            placeholder="Select .p12 file"
+            placeholder="Select a .p12 file"
           />
           <div className={certificateInput}>
             <Typography color="textSecondary">Certificate password</Typography>
