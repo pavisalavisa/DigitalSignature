@@ -9,6 +9,7 @@ import Registration from "./components/Registration";
 import Pdf from "./components/Pdf";
 import History from "./components/History";
 import Binary from "./components/Binary"
+import Account from "./components/Account";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <PrivateRoute exact path="/pdf" component={Pdf} />
             <PrivateRoute exact path="/history" component={History} />
             <PrivateRoute exact path="/other-files" component={Binary} />
+            <PrivateRoute exact path="/account" component={Account} />
           </Switch>
       </Router>
     </AuthState>

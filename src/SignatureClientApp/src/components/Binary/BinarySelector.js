@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { saveAs } from "file-saver";
 import { signBinary } from "../../services/signatureService";
 import { verifyBinary } from "../../services/verificationService";
-import { Button, Input, Typography, Grid, Divider } from "@material-ui/core";
+import { Button, Input, Typography, Grid } from "@material-ui/core";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import { withSnackbar } from "../Snackbar";

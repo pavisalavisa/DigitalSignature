@@ -30,7 +30,7 @@ export default (state, action) => {
         token: null,
         isAuthenticated: false,
         user: null,
-        error: null,
+        error: action.payload,
         loading: false,
       };
     default:

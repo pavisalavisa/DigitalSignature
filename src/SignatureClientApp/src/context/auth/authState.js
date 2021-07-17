@@ -3,6 +3,7 @@ import axios from "axios";
 import AuthContext from "./authContext";
 import authReducer from "./authReducer";
 import AuthenticationService from "../../services/authenticationService";
+import useComponentWillMount from "../../hooks/componentWillMountHook";
 
 const DefaultAuthorizationHeader = "Authorization";
 
@@ -26,7 +27,9 @@ const AuthState = (props) => {
     error: null,
   };
 
-  useEffect(() => setAuthenticationHeader(token), []);
+  useComponentWillMount(() => {
+    setAuthenticationHeader(token);
+  });
 
   const [state, dispatch] = useReducer(authReducer, initialState);
 
@@ -66,11 +69,13 @@ const AuthState = (props) => {
     }
   };
 
-  const logout = () => {
+  const logout = (reason = null) => {
     AuthenticationService.logout();
+    localStorage.removeItem("token");
 
     dispatch({
       type: "LOGOUT",
+      payload: reason,
     });
   };
 

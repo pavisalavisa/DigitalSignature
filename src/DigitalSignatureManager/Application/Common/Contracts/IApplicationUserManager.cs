@@ -12,6 +12,6 @@ namespace Application.Common.Contracts
         Task AddToRole(int userId, Roles role);
         Task<IEnumerable<Roles>> GetUserRoles(ApplicationUser user);
         Task<ApplicationUser> GetUser(string email, string password);
-        Task<bool> EmailExists(string email);
+        Task<bool> EmailExists(string email, int? currentUserId = null);
     }
 }

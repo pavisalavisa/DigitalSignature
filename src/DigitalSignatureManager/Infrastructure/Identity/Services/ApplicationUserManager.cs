@@ -79,9 +79,11 @@ namespace Infrastructure.Identity.Services
             return !isPasswordValid ? null : user;
         }
 
-        public Task<bool> EmailExists(string email)
+        public Task<bool> EmailExists(string email, int? currentUserId = null)
         {
-            return base.Users.AnyAsync(u => u.Email == email);
+            return currentUserId is null
+                ? base.Users.AnyAsync(u => u.Email == email)
+                : base.Users.AnyAsync(u => u.Id != currentUserId && u.Email == email);
         }
-    }
+    } 
 }
