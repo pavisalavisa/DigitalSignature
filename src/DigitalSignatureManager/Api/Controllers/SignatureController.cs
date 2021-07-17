@@ -47,7 +47,7 @@ namespace Api.Controllers
         /// </summary>
         /// <param name="requestModel"></param>
         /// <param name="command"></param>
-        /// <returns></returns>
+        /// <returns>Signed PDF file</returns>
         [HttpPost]
         [Authorize(Roles = "RegularUser")]
         [Route("Pdf/Download")]

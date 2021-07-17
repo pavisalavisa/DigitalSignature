@@ -6,6 +6,7 @@ using Application.Users.Commands.RegisterUser;
 using Application.Users.Commands.UpdatePersonalInformation;
 using Application.Users.Commands.UpdateUser;
 using Application.Users.Queries.GetAllUsers;
+using Application.Users.Queries.GetPersonalCertificate;
 using Application.Users.Queries.GetPersonalInformation;
 using Application.Users.Queries.GetUserById;
 using Microsoft.AspNetCore.Authorization;
@@ -173,6 +174,30 @@ namespace Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Gets the personal certificate of the authenticated user.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /api/Users/Certificate
+        /// 
+        /// </remarks>
+        /// <returns>Ok with certificate file result</returns>
+        /// <response code ="200">Certificate was successfully exported</response>
+        /// <response code ="400">Validation error happened</response>
+        /// <response code ="401">Authentication error happened</response>
+        /// <response code ="404">Certificate could not be found</response>
+        [HttpGet]
+        [Authorize(Roles = "Admin, RegularUser")]
+        [Route("Certificate")]
+        public async Task<ActionResult> PostCertificate([FromServices] IGetPersonalCertificateQuery query)
+        {
+            var result = await query.Query();
+
+            return new FileStreamResult(result, "application/pkcs-12");;
+        }
+        
         /// <summary>
         /// Get the personal information of currently authenticated user
         /// </summary>

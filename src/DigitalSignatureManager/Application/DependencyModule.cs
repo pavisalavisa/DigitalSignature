@@ -11,6 +11,7 @@ using Application.Users.Commands.RegisterUser;
 using Application.Users.Commands.UpdatePersonalInformation;
 using Application.Users.Commands.UpdateUser;
 using Application.Users.Queries.GetAllUsers;
+using Application.Users.Queries.GetPersonalCertificate;
 using Application.Users.Queries.GetPersonalInformation;
 using Application.Users.Queries.GetUserById;
 using Application.Verification.Commands.VerifyBinary;
@@ -41,6 +42,7 @@ namespace Application
             services.AddScoped<IAssignCertificateCommand, AssignCertificateCommand>();
             services.AddScoped<IGetPersonalInformationQuery, GetPersonalInformationQuery>();
             services.AddScoped<IUpdatePersonalInformationCommand, UpdatePersonalInformationCommand>();
+            services.AddScoped<IGetPersonalCertificateQuery, GetPersonalCertificateQuery>();
         }
 
         private static void AddCertificateServices(IServiceCollection services)
