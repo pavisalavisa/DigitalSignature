@@ -12,10 +12,9 @@ openssl req -config /root/ca/intermediate/openssl.cnf \
       -subj "/C=HR/ST=Splitsko-Dalmatinska/L=Split/O=UNIST/OU=UNIST/CN=$1.unist/EMAIL=$1@unist.hr" &>/dev/null
 #Now sign it with the intermediate CA
 echo -e "y\ny\n" | openssl ca -config /root/ca/intermediate/openssl.cnf \
-      -extensions $2 -days 365 -notext -md sha256 \
+      -extensions usr_cert -days 365 -notext -md sha256 \
       -in /root/ca/intermediate/csr/$1.csr.pem \
       -out /root/ca/intermediate/certs/$1.cert.pem &>/dev/null
-
 
 chmod 444 /root/ca/intermediate/certs/$1.cert.pem
 echo "$(cat /root/ca/intermediate/certs/$1.cert.pem)"
