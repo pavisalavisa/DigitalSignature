@@ -1,14 +1,24 @@
 package com.example.digitalsignatureapi.config;
 
 import eu.europa.esig.dss.alert.LogOnStatusAlert;
+import eu.europa.esig.dss.enumerations.DigestAlgorithm;
 import eu.europa.esig.dss.model.DSSException;
+import eu.europa.esig.dss.model.x509.CertificateToken;
+import eu.europa.esig.dss.model.x509.revocation.crl.CRL;
+import eu.europa.esig.dss.model.x509.revocation.ocsp.OCSP;
 import eu.europa.esig.dss.pades.signature.PAdESService;
 import eu.europa.esig.dss.policy.ValidationPolicy;
 import eu.europa.esig.dss.policy.ValidationPolicyFacade;
+import eu.europa.esig.dss.service.SecureRandomNonceSource;
+import eu.europa.esig.dss.service.http.commons.OCSPDataLoader;
 import eu.europa.esig.dss.service.http.commons.TimestampDataLoader;
+import eu.europa.esig.dss.service.ocsp.OnlineOCSPSource;
 import eu.europa.esig.dss.service.tsp.OnlineTSPSource;
 import eu.europa.esig.dss.spi.x509.CommonTrustedCertificateSource;
 import eu.europa.esig.dss.spi.x509.KeyStoreCertificateSource;
+import eu.europa.esig.dss.spi.x509.revocation.OfflineRevocationSource;
+import eu.europa.esig.dss.spi.x509.revocation.RevocationSource;
+import eu.europa.esig.dss.spi.x509.revocation.crl.ExternalResourcesCRLSource;
 import eu.europa.esig.dss.spi.x509.tsp.TSPSource;
 import eu.europa.esig.dss.validation.CertificateVerifier;
 import eu.europa.esig.dss.validation.CommonCertificateVerifier;
@@ -23,6 +33,9 @@ import org.xml.sax.SAXException;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 
 @Configuration
 public class BeanConfig {
@@ -36,18 +49,38 @@ public class BeanConfig {
     @Value("classpath:rootCA.p12")
     private Resource rootCA;
 
+    @Value("classpath:rootCA2.pem")
+    private Resource rootCA2;
+
+    @Value("classpath:intermediateCA.pem")
+    private Resource intermediateCA;
+
+    @Value("classpath:intermediateOcsp.pem")
+    private Resource intermediateOcsp;
+
+    @Value("classpath:timestampRootCa.pem")
+    private Resource timestampRootCa;
+
+
     @Value("classpath:customValidationPolicy.xml")
     private Resource CustomValidationPolicy;
 
     @Value("${tspServerUri}")
     private String tspServer;
 
+    @Value("classpath:crl.pem")
+    private Resource CrlFile;
+
     @Bean
     public CertificateVerifier certificateVerifier() {
         CommonCertificateVerifier certificateVerifier = new CommonCertificateVerifier();
 
-        certificateVerifier.setTrustedCertSources(customRootCAKeyStore());
+        certificateVerifier.setTrustedCertSources(rootCaCertificateSource());
+        certificateVerifier.setAdjunctCertSources(adjunctCertificatesSource());
 
+//        certificateVerifier.setSignatureCRLSource(CRLRevocationSource());
+
+        certificateVerifier.setOcspSource(OCSPRevocationSource());
         certificateVerifier.setCheckRevocationForUntrustedChains(false);
         certificateVerifier.setAlertOnMissingRevocationData(new LogOnStatusAlert(Level.WARN));
         certificateVerifier.setAlertOnInvalidTimestamp(new LogOnStatusAlert(Level.WARN));
@@ -83,22 +116,74 @@ public class BeanConfig {
     }
 
     @Bean
-    public CommonTrustedCertificateSource customRootCAKeyStore() {
+    public CommonTrustedCertificateSource rootCaCertificateSource() {
         try {
-
             KeyStoreCertificateSource keystore = new KeyStoreCertificateSource(rootCA.getFile(), customRootCAKsType, customRootCAKsPassword);
 
             CommonTrustedCertificateSource trustedCertificateSource = new CommonTrustedCertificateSource();
             trustedCertificateSource.importAsTrusted(keystore);
 
+            CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+            X509Certificate myPkiRootCert = (X509Certificate) certFactory.generateCertificate(rootCA2.getInputStream());
+            X509Certificate timestampPkiRootCert = (X509Certificate) certFactory.generateCertificate(timestampRootCa.getInputStream());
+
+            trustedCertificateSource.addCertificate(new CertificateToken(myPkiRootCert));
+            trustedCertificateSource.addCertificate(new CertificateToken(timestampPkiRootCert));
+
             return trustedCertificateSource;
-        } catch (IOException e) {
+        } catch (IOException | CertificateException e) {
             throw new DSSException("Unable to load the root CA file ", e);
+        }
+    }
+
+    @Bean
+    public CommonTrustedCertificateSource adjunctCertificatesSource() {
+        try {
+            CommonTrustedCertificateSource trustedCertificateSource = new CommonTrustedCertificateSource();
+
+            CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+            X509Certificate intermediateCaCert = (X509Certificate) certFactory.generateCertificate(intermediateCA.getInputStream());
+            X509Certificate intermediateOcspCert = (X509Certificate) certFactory.generateCertificate(intermediateOcsp.getInputStream());
+
+            trustedCertificateSource.addCertificate(new CertificateToken(intermediateCaCert));
+            trustedCertificateSource.addCertificate(new CertificateToken(intermediateOcspCert));
+
+            return trustedCertificateSource;
+        } catch (IOException | CertificateException e) {
+            throw new DSSException("Unable to load the intermediate CA files ", e);
         }
     }
 
     @Bean
     public ValidationPolicy validationPolicy() throws IOException, XMLStreamException, JAXBException, SAXException {
         return ValidationPolicyFacade.newFacade().getValidationPolicy(CustomValidationPolicy.getInputStream());
+    }
+
+    @Bean
+    public OfflineRevocationSource<CRL> CRLRevocationSource() throws IOException{
+        return new ExternalResourcesCRLSource(CrlFile.getInputStream());
+    }
+
+    @Bean
+    public RevocationSource<OCSP> OCSPRevocationSource(){
+        // Instantiates a new OnlineOCSPSource object
+        OnlineOCSPSource onlineOCSPSource = new OnlineOCSPSource();
+        // Allows setting an implementation of `DataLoader` interface,
+        // processing a querying of a remote revocation server.
+        // `CommonsDataLoader` instance is used by default.
+        onlineOCSPSource.setDataLoader(new OCSPDataLoader());
+        // Defines an arbitrary integer used in OCSP source querying in order to prevent a
+        // replay attack.
+        // Default : null (not used by default).
+        onlineOCSPSource.setNonceSource(new SecureRandomNonceSource());
+        // Defines a DigestAlgorithm being used to generate a CertificateID in order to
+        //complete an OCSP request.
+        // OCSP servers supporting multiple hash functions may produce a revocation response
+        // with a digest algorithm depending on the provided CertificateID's algorithm.
+        // Default : SHA1 (as a mandatory requirement to be implemented by OCSP servers. See
+        //RFC 5019).
+        onlineOCSPSource.setCertIDDigestAlgorithm(DigestAlgorithm.SHA256);
+
+        return onlineOCSPSource;
     }
 }
