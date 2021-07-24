@@ -30,6 +30,8 @@ services:
       context: src/DigitalSignatureSigner
       dockerfile: Dockerfile
     restart: on-failure
+    depends_on:
+      - crl-provider
 # Nice conversation starter :)
 # How to handle DB in the containerized world
   db:
@@ -37,3 +39,14 @@ services:
     environment:
       - "SA_PASSWORD=MyPassword123"
       - "ACCEPT_EULA=Y"
+  crl-provider:
+    image: ${DOCKER_REGISTRY-}digital-signature-crl-provider
+    build:
+        context: src/CRLProvider
+        dockerfile: Dockerfile
+    hostname: crl.example.com
+    restart: always
+    volumes:
+      - ./src/ExamplePKI/ca/intermediate/crl:/srv/crl  
+    ports:
+      - 80:80
