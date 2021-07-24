@@ -1,7 +1,7 @@
 import { fileToBase64 } from "../common/encodingHelpers";
 import { post } from "./baseApiService";
 
-const DefaultSignatureProfile = "LT";
+const DefaultSignatureProfile = "LTA";
 
 export const signPdf = async (file, profile = DefaultSignatureProfile) => {
   return await sign(file, profile, "Signature/Pdf/Download", "blob");

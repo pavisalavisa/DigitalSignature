@@ -73,6 +73,11 @@
 			<artifactId>dss-utils-google-guava</artifactId>
 			<version>5.8</version>
 		</dependency>
+		<dependency>
+			<groupId>eu.europa.ec.joinup.sd-dss</groupId>
+			<artifactId>dss-crl-parser-x509crl</artifactId>
+			<version>5.8</version>
+		</dependency>
 
 	</dependencies>
 
