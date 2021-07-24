@@ -8,8 +8,8 @@ chmod 700 /root/ca/private
 touch /root/ca/index.txt
 #Echo the user id
 echo 1000 > /root/ca/serial
+echo 1000 > /root/ca/crlnumber
 echo "*** Succesfully set up the CA directory structure"
-
 
 #Generating the root key for the CA | For simplicity without passphrase for usage within docker
 openssl genrsa -out /root/ca/private/ca.key.pem 4096
@@ -27,6 +27,11 @@ openssl req -config /root/ca/openssl.cnf \
 echo "*** Created Root Certificate"
 #Grant everyone reading rights
 chmod 444 /root/ca/certs/ca.cert.pem
+
+#Create a Certificate revocation list of the root CA
+openssl ca -config /root/ca/openssl.cnf \
+      -gencrl -out /root/ca/crl/ca.crl.pem
+echo "*** Created CRL of the root CA"
 
 #Now that we created the root pair, we should use and intermediate one.
 #This part is the same as above except for the folder
