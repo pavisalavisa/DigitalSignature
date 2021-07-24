@@ -17,5 +17,5 @@ RUN chmod +x create_ca.sh && \
 # RUN ./create_ca.sh 
 
 COPY docker-entrypoint.sh docker-entrypoint.sh
-EXPOSE 2560
+EXPOSE 80
 ENTRYPOINT [ "/bin/sh", "docker-entrypoint.sh" ]

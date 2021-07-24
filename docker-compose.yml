@@ -62,4 +62,4 @@ services:
     volumes:
       - ./src/ExamplePKI/root:/root  
     ports:
-      - 2560:2560
+      - 2560:80
