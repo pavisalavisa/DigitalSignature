@@ -31,6 +31,7 @@ services:
     restart: on-failure
     depends_on:
       - crl-provider
+      - ocsp-provider
 # Nice conversation starter :)
 # How to handle DB in the containerized world
   db:
@@ -50,8 +51,20 @@ services:
     hostname: crl.example.com
     restart: always
     volumes:
-      - ./src/ExamplePKI/ca/intermediate/crl:/srv/crl  
+      - ./src/ExamplePKI/root/ca/intermediate/crl:/srv/crl/intermediate
+      - ./src/ExamplePKI/root/ca/crl:/srv/crl/ca  
     ports:
       - 80:80
+  ocsp-provider:
+    image: ${DOCKER_REGISTRY-}digital-signature-ocsp-provider
+    build:
+        context: src/OCSPProvider
+        dockerfile: Dockerfile
+    hostname: ocsp.example.com
+    restart: always
+    volumes:
+      - ./src/ExamplePKI/root:/root  
+    ports:
+      - 2560:2560
 volumes:
     events_mssql:
