@@ -4,21 +4,19 @@ import eu.europa.esig.dss.alert.LogOnStatusAlert;
 import eu.europa.esig.dss.enumerations.DigestAlgorithm;
 import eu.europa.esig.dss.model.DSSException;
 import eu.europa.esig.dss.model.x509.CertificateToken;
-import eu.europa.esig.dss.model.x509.revocation.crl.CRL;
 import eu.europa.esig.dss.model.x509.revocation.ocsp.OCSP;
 import eu.europa.esig.dss.pades.signature.PAdESService;
 import eu.europa.esig.dss.policy.ValidationPolicy;
 import eu.europa.esig.dss.policy.ValidationPolicyFacade;
 import eu.europa.esig.dss.service.SecureRandomNonceSource;
+import eu.europa.esig.dss.service.http.commons.CommonsDataLoader;
 import eu.europa.esig.dss.service.http.commons.OCSPDataLoader;
 import eu.europa.esig.dss.service.http.commons.TimestampDataLoader;
 import eu.europa.esig.dss.service.ocsp.OnlineOCSPSource;
 import eu.europa.esig.dss.service.tsp.OnlineTSPSource;
 import eu.europa.esig.dss.spi.x509.CommonTrustedCertificateSource;
 import eu.europa.esig.dss.spi.x509.KeyStoreCertificateSource;
-import eu.europa.esig.dss.spi.x509.revocation.OfflineRevocationSource;
 import eu.europa.esig.dss.spi.x509.revocation.RevocationSource;
-import eu.europa.esig.dss.spi.x509.revocation.crl.ExternalResourcesCRLSource;
 import eu.europa.esig.dss.spi.x509.tsp.TSPSource;
 import eu.europa.esig.dss.validation.CertificateVerifier;
 import eu.europa.esig.dss.validation.CommonCertificateVerifier;
@@ -61,27 +59,23 @@ public class BeanConfig {
     @Value("classpath:timestampRootCa.pem")
     private Resource timestampRootCa;
 
-
     @Value("classpath:customValidationPolicy.xml")
     private Resource CustomValidationPolicy;
 
     @Value("${tspServerUri}")
     private String tspServer;
 
-    @Value("classpath:crl.pem")
-    private Resource CrlFile;
-
     @Bean
     public CertificateVerifier certificateVerifier() {
         CommonCertificateVerifier certificateVerifier = new CommonCertificateVerifier();
 
+        certificateVerifier.setDataLoader(new CommonsDataLoader());
         certificateVerifier.setTrustedCertSources(rootCaCertificateSource());
         certificateVerifier.setAdjunctCertSources(adjunctCertificatesSource());
 
-//        certificateVerifier.setSignatureCRLSource(CRLRevocationSource());
-
         certificateVerifier.setOcspSource(OCSPRevocationSource());
-        certificateVerifier.setCheckRevocationForUntrustedChains(false);
+
+        certificateVerifier.setCheckRevocationForUntrustedChains(true);
         certificateVerifier.setAlertOnMissingRevocationData(new LogOnStatusAlert(Level.WARN));
         certificateVerifier.setAlertOnInvalidTimestamp(new LogOnStatusAlert(Level.WARN));
         certificateVerifier.setAlertOnRevokedCertificate(new LogOnStatusAlert(Level.WARN));
@@ -157,11 +151,6 @@ public class BeanConfig {
     @Bean
     public ValidationPolicy validationPolicy() throws IOException, XMLStreamException, JAXBException, SAXException {
         return ValidationPolicyFacade.newFacade().getValidationPolicy(CustomValidationPolicy.getInputStream());
-    }
-
-    @Bean
-    public OfflineRevocationSource<CRL> CRLRevocationSource() throws IOException{
-        return new ExternalResourcesCRLSource(CrlFile.getInputStream());
     }
 
     @Bean
