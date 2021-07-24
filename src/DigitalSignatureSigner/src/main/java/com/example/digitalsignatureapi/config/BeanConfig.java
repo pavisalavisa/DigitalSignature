@@ -4,16 +4,19 @@ import eu.europa.esig.dss.alert.LogOnStatusAlert;
 import eu.europa.esig.dss.enumerations.DigestAlgorithm;
 import eu.europa.esig.dss.model.DSSException;
 import eu.europa.esig.dss.model.x509.CertificateToken;
+import eu.europa.esig.dss.model.x509.revocation.crl.CRL;
 import eu.europa.esig.dss.model.x509.revocation.ocsp.OCSP;
 import eu.europa.esig.dss.pades.signature.PAdESService;
 import eu.europa.esig.dss.policy.ValidationPolicy;
 import eu.europa.esig.dss.policy.ValidationPolicyFacade;
 import eu.europa.esig.dss.service.SecureRandomNonceSource;
+import eu.europa.esig.dss.service.crl.OnlineCRLSource;
 import eu.europa.esig.dss.service.http.commons.CommonsDataLoader;
 import eu.europa.esig.dss.service.http.commons.OCSPDataLoader;
 import eu.europa.esig.dss.service.http.commons.TimestampDataLoader;
 import eu.europa.esig.dss.service.ocsp.OnlineOCSPSource;
 import eu.europa.esig.dss.service.tsp.OnlineTSPSource;
+import eu.europa.esig.dss.spi.client.http.Protocol;
 import eu.europa.esig.dss.spi.x509.CommonTrustedCertificateSource;
 import eu.europa.esig.dss.spi.x509.KeyStoreCertificateSource;
 import eu.europa.esig.dss.spi.x509.revocation.RevocationSource;
@@ -74,6 +77,7 @@ public class BeanConfig {
         certificateVerifier.setAdjunctCertSources(adjunctCertificatesSource());
 
         certificateVerifier.setOcspSource(OCSPRevocationSource());
+        certificateVerifier.setCrlSource(CRLRevocationSource());
 
         certificateVerifier.setCheckRevocationForUntrustedChains(true);
         certificateVerifier.setAlertOnMissingRevocationData(new LogOnStatusAlert(Level.WARN));
@@ -151,6 +155,17 @@ public class BeanConfig {
     @Bean
     public ValidationPolicy validationPolicy() throws IOException, XMLStreamException, JAXBException, SAXException {
         return ValidationPolicyFacade.newFacade().getValidationPolicy(CustomValidationPolicy.getInputStream());
+    }
+
+    @Bean
+    public RevocationSource<CRL> CRLRevocationSource(){
+        OnlineCRLSource onlineCRLSource = new OnlineCRLSource();
+
+        onlineCRLSource.setDataLoader(new CommonsDataLoader());
+
+        onlineCRLSource.setPreferredProtocol(Protocol.HTTP);
+
+        return onlineCRLSource;
     }
 
     @Bean
