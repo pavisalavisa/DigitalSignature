@@ -1,0 +1,1 @@
+V	310722105832Z		1000	unknown	/C=HR/ST=Splitsko-Dalmatinska/O=UNIST/OU=UNIST Certificate Authority /CN=www.unist.hr Intermediate CA

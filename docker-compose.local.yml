@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.8'
 
 services:
   manager-api:
@@ -29,6 +29,9 @@ services:
       context: src/DigitalSignatureSigner
       dockerfile: Dockerfile
     restart: on-failure
+    depends_on:
+      - crl-provider
+      - ocsp-provider
 # Nice conversation starter :)
 # How to handle DB in the containerized world
   db:
@@ -36,3 +39,26 @@ services:
     environment:
       - "SA_PASSWORD=MyPassword123"
       - "ACCEPT_EULA=Y"
+  crl-provider:
+    image: ${DOCKER_REGISTRY-}digital-signature-crl-provider
+    build:
+        context: src/CRLProvider
+        dockerfile: Dockerfile
+    hostname: crl.example.com
+    restart: always
+    volumes:
+      - ./src/ExamplePKI/root/ca/intermediate/crl:/srv/crl/intermediate
+      - ./src/ExamplePKI/root/ca/crl:/srv/crl/ca  
+    ports:
+      - 80:80
+  ocsp-provider:
+    image: ${DOCKER_REGISTRY-}digital-signature-ocsp-provider
+    build:
+        context: src/OCSPProvider
+        dockerfile: Dockerfile
+    hostname: ocsp.example.com
+    restart: always
+    volumes:
+      - ./src/ExamplePKI/root:/root  
+    ports:
+      - 2560:80
