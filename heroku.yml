@@ -1,0 +1,6 @@
+build:
+  docker:
+    signer-api: src/DigitalSignatureSigner/Dockerfile
+    signature-manager: src/DigitalSignatureManager/Api/Dockerfile
+    crl-provider: src/CRLProvider/Dockerfile
+    ocsp-provider: src/OCSPProvider/Dockerfile
