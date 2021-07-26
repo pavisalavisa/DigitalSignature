@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import { withRouter } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -10,19 +11,32 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    padding: theme.spacing(2),
+  },
+  titleContainer: {
+    "&:hover": {
+      cursor: "pointer",
+    },
   },
 }));
 
-export default () => {
+function Navbar({ history }) {
   const classes = useStyles();
 
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar>
-        <Typography variant="h6" className={classes.title}>
-          Digital signature manager
-        </Typography>
+        <div
+          onClick={() => history.push("/")}
+          className={classes.titleContainer}
+        >
+          <Typography variant="h6" className={classes.title}>
+            Digital signature
+          </Typography>
+        </div>
       </Toolbar>
     </AppBar>
   );
-};
+}
+
+export default withRouter(Navbar);
