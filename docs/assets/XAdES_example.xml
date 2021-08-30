@@ -1,0 +1,43 @@
+                              XMLDSIG 
+                                   |
+<ds:Signature ID?>- - - - - - - - -+- - - - -+
+  <ds:SignedInfo>                  |         |
+    <ds:CanonicalizationMethod/>   |         |
+    <ds:SignatureMethod/>          |         |
+    (<ds:Reference URI? >          |         |
+      (<ds:Transforms>)?           |         |
+      <ds:DigestMethod>            |         |
+      <ds:DigestValue>             |         |
+    </ds:Reference>)+              |         |
+  </ds:SignedInfo>                 |         |
+  <ds:SignatureValue>              |         |
+  (<ds:KeyInfo>)?- - - - - - - - - +         |
+                                             |
+  <ds:Object>                                |
+                                             |
+    <QualifyingProperties>                   |
+      <SignedProperties>                     |
+        <SignedSignatureProperties>          |
+          (SigningTime)                      |
+          (SigningCertificate)               |
+          (SignaturePolicyIdentifier)        |
+          (SignatureProductionPlace)?        |
+          (SignerRole)?                      |
+        </SignedSignatureProperties>         |
+        <SignedDataObjectProperties>         |
+          (DataObjectFormat)*                |
+          (CommitmentTypeIndication)*        |
+          (AllDataObjectsTimeStamp)*         |
+          (IndividualDataObjectsTimeStamp)*  |
+        </SignedDataObjectProperties>        |
+      </SignedProperties>                    |
+      <UnsignedProperties>                   |
+        <UnsignedSignatureProperties>        |
+          (CounterSignature)*                |
+        </UnsignedSignatureProperties>       |
+      </UnsignedProperties>                  |
+    </QualifyingProperties>                  |
+  </ds:Object>                               |
+</ds:Signature>- - - - - - - - - - - - - - - +
+                                             |
+                                          XAdES
